@@ -450,6 +450,20 @@
         #theme-toggle {
             font-size: 1.1rem;
             line-height: 1;
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass-heavy);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        #theme-toggle:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--accent);
         }
 
         @media (max-width: 991px) {
@@ -529,7 +543,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 text-center text-lg-start">
-                    <button class="btn btn-sm btn-outline-light border-0" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <button class="btn btn-sm" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
                         <i class="bi bi-sun-fill"></i>
                     </button>
                     <a href="#hero" class="nav-link text-white-50 fw-medium small">Home</a>
