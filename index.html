@@ -2,28 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EnjoyTheLab | Advanced Biotech Data Management & Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnjoyTheLab | Experiment-Specific Analysis Modules</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary-cyan: #00f2fe;
-            --secondary-blue: #4facfe;
-            --bg-deep: #0a081d;
-            --card-bg: rgba(22, 18, 61, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(0, 242, 254, 0.25);
+        :root, [data-bs-theme="dark"] {
+            --bg-primary: #0f0c29;
+            --bg-secondary: #302b63;
+            --bg-tertiary: #24243e;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.08);
+            --bg-glass-strong: rgba(255, 255, 255, 0.1);
+            --bg-input: rgba(0, 0, 0, 0.2);
+            --bg-input-focus: rgba(0, 0, 0, 0.3);
+            --bg-navbar: rgba(15, 12, 41, 0.95);
+            --bg-footer: rgba(5, 4, 15, 0.6);
+            --bg-navbar-collapse: rgba(10, 8, 29, 0.95);
+            --bg-modal: #0d0b21;
+            --bg-browser: #0d0b21;
+            --bg-radial-glow: #1c154d;
+            --text-primary: #f8fafc;
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-glass-strong: rgba(255, 255, 255, 0.1);
+            --border-glass-heavy: rgba(255, 255, 255, 0.2);
+            --accent: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --accent-light: #a78bfa;
+            --accent-gradient-start: #667eea;
+            --accent-gradient-end: #764ba2;
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --accent-bg: rgba(139, 92, 246, 0.1);
+            --logo-enjoy: #00cccc;
+            --logo-thelab: #abefff;
+            --success: #10b981;
+            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --shadow-glow: 0 4px 15px 0 rgba(139, 92, 246, 0.4);
+            --shadow-glow-hover: 0 6px 25px 0 rgba(139, 92, 246, 0.6);
+            --gradient-text: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --btn-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        /* FIXED: Separated HTML and Body to ensure natural scrolling without viewport crops */
+        [data-bs-theme="light"] {
+            --bg-primary: #faf8ff;
+            --bg-secondary: #ede8f5;
+            --bg-tertiary: #e2d9f0;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.5);
+            --bg-glass-hover: rgba(139, 92, 246, 0.04);
+            --bg-glass-strong: rgba(139, 92, 246, 0.04);
+            --bg-input: #ffffff;
+            --bg-input-focus: #ffffff;
+            --bg-navbar: rgba(250, 248, 255, 0.95);
+            --bg-footer: rgba(250, 248, 255, 0.9);
+            --bg-navbar-collapse: rgba(250, 248, 255, 0.98);
+            --bg-modal: #ffffff;
+            --bg-browser: #f5f0ff;
+            --bg-radial-glow: #e8e0f5;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border-glass: rgba(0, 0, 0, 0.08);
+            --border-glass-strong: rgba(0, 0, 0, 0.1);
+            --border-glass-heavy: rgba(0, 0, 0, 0.15);
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
+            --accent-light: #8b5cf6;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --accent-bg: rgba(124, 58, 237, 0.08);
+            --logo-enjoy: #0d9488;
+            --logo-thelab: #0284c7;
+            --success: #059669;
+            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+            --shadow-glow: 0 4px 15px 0 rgba(124, 58, 237, 0.2);
+            --shadow-glow-hover: 0 6px 25px 0 rgba(124, 58, 237, 0.3);
+            --gradient-text: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --btn-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
         html {
             scroll-behavior: smooth;
             overflow-x: hidden;
-            background-color: var(--bg-deep);
+            background-color: var(--bg-primary);
         }
 
         body {
@@ -36,14 +102,16 @@
             font-family: 'Inter', sans-serif;
             position: relative;
             background-color: transparent !important;
-            color: #ffffff !important;
+            color: var(--text-primary) !important;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 16px;
         }
 
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% 20%, #1c154d 0%, var(--bg-deep) 60%);
+            background: radial-gradient(circle at 80% 20%, var(--bg-radial-glow) 0%, var(--bg-primary) 60%);
             z-index: -2;
         }
 
@@ -71,31 +139,38 @@
             z-index: 1;
         }
 
-        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; }
 
-        .enjoy-big { font-family: 'JetBrains Mono', monospace; color: var(--primary-cyan); font-weight: 700; font-size: 1.65rem; }
-        .the-lab-big { font-family: 'Outfit', sans-serif; color: var(--secondary-blue); font-weight: 900; font-size: 1.85rem; letter-spacing: -0.5px; }
+        .enjoy-big { font-family: 'JetBrains Mono', monospace; color: var(--logo-enjoy); font-weight: 700; }
+        .the-lab-big { font-family: 'Outfit', sans-serif; color: var(--logo-thelab); font-weight: 900; letter-spacing: -0.5px; }
 
         .glass-nav {
-            background-color: rgba(10, 8, 29, 0.8) !important;
+            background-color: var(--bg-navbar) !important;
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border) !important;
+            border-bottom: 1px solid var(--border-glass) !important;
             z-index: 1050;
         }
 
         .glass-card {
-            background: var(--card-bg) !important;
-            border: 1px solid var(--glass-border) !important;
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-glass-strong) !important;
             border-radius: 1.25rem;
-            color: #ffffff !important;
+            color: var(--text-primary) !important;
             backdrop-filter: blur(10px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(0, 242, 254, 0.3) !important;
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05);
+            border-color: rgba(139, 92, 246, 0.3) !important;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.08);
+        }
+
+        .section-title {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero-section {
@@ -106,20 +181,19 @@
             padding-bottom: 60px;
         }
 
-        .mission-section {
+        .content-section {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 75vh;
             padding-top: 80px;
-            padding-bottom: 100px;
+            padding-bottom: 90px;
             position: relative;
             z-index: 2;
-            border-top: 1px solid var(--glass-border);
+            border-top: 1px solid var(--border-glass);
         }
 
         .browser-mockup {
-            background-color: #0d0b21 !important;
+            background-color: var(--bg-browser) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             border-radius: 1rem;
             position: relative;
@@ -140,123 +214,247 @@
         .screenshot-img { width: 100%; height: auto; display: block; opacity: 0.95; }
 
         .live-badge {
-            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-blue)) !important;
-            color: #0f0c29 !important;
+            background: var(--btn-primary-gradient) !important;
+            color: #fff !important;
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .icon-circle {
             width: 44px; height: 44px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 12px;
-            background: rgba(0, 242, 254, 0.1) !important;
-            color: var(--primary-cyan) !important;
+            background: var(--accent-bg) !important;
+            color: var(--accent-light) !important;
             font-size: 1.2rem;
         }
 
+        .module-tag {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            background: var(--accent-bg);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: var(--accent-light);
+        }
+
         .btn-glow {
-            background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--secondary-blue) 100%) !important;
+            background: var(--btn-primary-gradient) !important;
             border: none !important;
-            color: #0a081d !important;
+            color: #fff !important;
             font-weight: 700;
             letter-spacing: 0.5px;
             border-radius: 50px;
             padding: 14px 28px;
-            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.25);
+            box-shadow: var(--shadow-glow);
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            min-height: 48px;
         }
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 242, 254, 0.4);
-            color: #0a081d !important;
+            box-shadow: var(--shadow-glow-hover);
+            color: #fff !important;
         }
 
-        .btn-outline-glass {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        .btn-outline-glass-alt {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+            border: none !important;
             color: #fff !important;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
             border-radius: 50px;
             padding: 14px 28px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            min-height: 48px;
         }
 
-        .btn-outline-glass:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary-cyan) !important;
+        .btn-outline-glass-alt:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.45);
             color: #fff !important;
         }
 
+        .btn-cta-primary {
+            background: var(--btn-primary-gradient) !important;
+            border: none !important;
+            color: #fff !important;
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 16px 36px;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 52px;
+        }
+
+        .btn-cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow-hover);
+            color: #fff !important;
+        }
+
+        .btn-cta-secondary {
+            background: var(--bg-glass-strong);
+            border: 1px solid var(--border-glass-heavy) !important;
+            backdrop-filter: blur(10px);
+            color: var(--text-primary) !important;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 16px 36px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 52px;
+        }
+
+        .btn-cta-secondary:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--accent) !important;
+            transform: translateY(-3px);
+            color: var(--text-primary) !important;
+        }
+
         .notify-form .form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--bg-glass-strong);
+            border: 1px solid var(--border-glass-heavy);
+            color: var(--text-primary);
             border-radius: 50px 0 0 50px;
             padding-left: 24px;
+            height: 54px;
         }
 
         .notify-form .form-control:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary-cyan);
-            box-shadow: none;
-            color: white;
+            background: var(--bg-glass-hover);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+            color: var(--text-primary);
         }
 
         .notify-form .btn {
             border-radius: 0 50px 50px 0;
-            background: var(--primary-cyan);
-            color: #0a081d;
+            background: var(--btn-primary-gradient);
+            color: #fff;
             font-weight: 700;
-            padding: 0 28px;
+            padding: 0 32px;
             border: none;
             transition: all 0.2s ease;
         }
 
         .notify-form .btn:hover {
-            background: #00e1ec;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-        }
-
-        .pipeline-box { transition: all 0.3s ease; }
-        .pipeline-box.active {
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
-            background: rgba(0, 242, 254, 0.06) !important;
+            box-shadow: var(--shadow-glow);
         }
 
         footer {
             flex-shrink: 0;
-            background: rgba(5, 4, 15, 0.6);
-            border-top: 1px solid var(--glass-border);
+            background: var(--bg-footer);
+            border-top: 1px solid var(--border-glass);
             padding: 2rem 0;
             position: relative;
             z-index: 2;
             backdrop-filter: blur(10px);
         }
 
-        .ping { animation: pulse-white 2s infinite; }
-        @keyframes pulse-white {
+        .ping { animation: pulse-violet 2s infinite; }
+        @keyframes pulse-violet {
             0% { transform: scale(0.95); opacity: 1; }
             70% { transform: scale(2.2); opacity: 0; }
             100% { transform: scale(0.95); opacity: 0; }
         }
 
-        /* --- MOBILE OPTIMIZATIONS --- */
+        .cta-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid var(--border-glass);
+            padding: 90px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        [data-bs-theme="light"] .glass-card {
+            border: 1px solid rgba(139, 92, 246, 0.15) !important;
+            box-shadow: var(--shadow-card), inset 0 1px 0 rgba(139, 92, 246, 0.08) !important;
+        }
+
+        [data-bs-theme="light"] .browser-mockup {
+            border: 1px solid var(--border-glass-heavy) !important;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.1), 0 0 40px rgba(124, 58, 237, 0.15);
+        }
+
+        [data-bs-theme="light"] .browser-header {
+            background: rgba(0, 0, 0, 0.02);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        [data-bs-theme="light"] .browser-dot {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        [data-bs-theme="light"] .notify-form .form-control {
+            background: var(--bg-input);
+            border: 1px solid var(--border-glass-heavy);
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="light"] .notify-form .form-control:focus {
+            background: var(--bg-input-focus);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25);
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="light"] .text-white-50 {
+            color: var(--text-muted) !important;
+        }
+
+        [data-bs-theme="light"] a.text-white.text-decoration-underline {
+            color: var(--accent) !important;
+        }
+
+        [data-bs-theme="light"] .modal-content .text-white {
+            color: var(--text-primary) !important;
+        }
+
+        [data-bs-theme="light"] .modal-content {
+            background: var(--bg-modal) !important;
+            border-color: var(--border-glass-heavy) !important;
+        }
+
+        [data-bs-theme="light"] .btn-close-white {
+            filter: none;
+        }
+
+        #theme-toggle {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
         @media (max-width: 991px) {
             .hero-section { padding-top: 120px; text-align: center; }
-            .mission-section { padding-top: 60px; padding-bottom: 60px; }
+            .content-section { padding-top: 60px; padding-bottom: 60px; }
             .browser-mockup { margin-top: 2rem; }
 
             .enjoy-big { font-size: 1.3rem !important; }
@@ -266,30 +464,51 @@
             h1.display-5 { font-size: 2.2rem; }
 
             .navbar-collapse {
-                background: rgba(10, 8, 29, 0.95);
+                background: var(--bg-navbar-collapse);
                 border-radius: 1rem;
                 padding: 1rem;
                 margin-top: 1rem;
-                border: 1px solid var(--glass-border);
+                border: 1px solid var(--border-glass);
             }
         }
 
         @media (max-width: 576px) {
-            .hero-section { padding-top: 100px; padding-bottom: 40px; min-height: auto; }
+            body { font-size: 15px; }
+
+            .hero-section {
+                padding-top: 100px;
+                padding-bottom: 40px;
+                min-height: auto;
+            }
+
+            .hero-section .row { --bs-gutter-y: 2rem; }
+
             .hero-section .enjoy-big { font-size: 1.8rem !important; }
             .hero-section .the-lab-big { font-size: 2rem !important; }
-            h1.display-5 { font-size: 1.8rem; }
+            h1.display-5 { font-size: 1.6rem; }
+            .lead { font-size: 0.95rem; }
+            h2.display-6 { font-size: 1.6rem; }
 
-            h3.display-6 { font-size: 1.8rem; }
-            h2.display-6 { font-size: 1.8rem; }
+            .content-section {
+                padding-top: 50px;
+                padding-bottom: 60px;
+            }
 
-            .btn-glow, .btn-outline-glass { width: 100%; margin-bottom: 10px; }
+            .cta-section { padding: 70px 0; }
 
-            .notify-form { flex-direction: column; gap: 10px; }
-            .notify-form .form-control { border-radius: 50px; text-align: center; padding: 14px 24px; width: 100%; }
-            .notify-form .btn { border-radius: 50px; width: 100%; padding: 14px 32px; }
+            .btn-glow, .btn-outline-glass, .btn-outline-glass-alt { width: 100%; margin-bottom: 10px; }
+            .btn-cta-primary, .btn-cta-secondary { width: 100%; }
+
+            .notify-form { flex-direction: column; gap: 0; }
+            .notify-form .form-control { border-radius: 50px 50px 0 0; text-align: center; padding: 14px 24px; width: 100%; height: auto; border-bottom: none; }
+            .notify-form .btn { border-radius: 0 0 50px 50px; width: 100%; padding: 14px 32px; min-height: 48px; }
 
             .browser-header .mx-auto { display: none; }
+            .browser-mockup { max-height: 35vh; margin-top: 1.5rem; }
+
+            .sticky-bg-logo { opacity: 0.06; }
+
+            .navbar-collapse .nav-link { padding: 10px 0; font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -305,55 +524,60 @@
                     <span class="enjoy-big">Enjoy</span><span class="the-lab-big">TheLab</span>
                 </span>
             </a>
-
             <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 text-center text-lg-start">
-                    <a href="#join" class="nav-link text-white-50 text-white-hover fw-medium small">Home</a>
-                    <a href="#mission" class="nav-link text-white-50 text-white-hover fw-medium small">Mission</a>
+                    <button class="btn btn-sm btn-outline-light border-0" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                    <a href="#hero" class="nav-link text-white-50 fw-medium small">Home</a>
+                    <a href="mailto:admin@enjoythelab.com" class="nav-link text-white-50 fw-medium small">Contact</a>
+                    <a href="#modules" class="nav-link text-white-50 fw-medium small">Modules</a>
+                    <a href="#cta" class="nav-link text-white-50 fw-medium small">Get Started</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <main>
-        <header id="join" class="hero-section">
+
+        <!-- HERO -->
+        <header id="hero" class="hero-section">
             <div class="container">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6 text-center text-lg-start">
                         <div class="mb-4">
-                            <span class="enjoy-big">Enjoy</span><span class="the-lab-big">TheLab</span>
+                            <span class="enjoy-big" style="font-size: 1.65rem;">Enjoy</span><span class="the-lab-big" style="font-size: 1.85rem;">TheLab</span>
                         </div>
                         <h1 class="display-5 fw-bold mb-3" style="line-height: 1.25; letter-spacing: -1px;">
-                            Manage, Analyze & Automate<br>
-                            <span style="background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Your Lab Data Hub</span>
+                            One Wet-Lab Experiment.<br>
+                            <span class="section-title">One Analysis Module.</span>
                         </h1>
-                        <p class="lead opacity-75 mb-4 fs-6 fs-md-5">The all-in-one platform built specifically for structured management and analysis of complex biotech workflows.</p>
+                        <p class="lead opacity-75 mb-4 fs-6 fs-md-5">Each module maps to a specific experiment type with pre-configured defaults. No coding. No configuration friction. From raw data to results in minutes.</p>
 
-                        <div class="mb-4 mx-auto mx-lg-0" style="max-width: 460px;">
+                        <div class="mb-4 mx-auto mx-lg-0" style="max-width: 480px;">
                             <form id="ajax-gform" class="input-group notify-form w-100">
                                 <input type="email" id="email-field" class="form-control form-control-lg fs-6" placeholder="Enter your email to stay updated..." aria-label="Email" required>
                                 <button class="btn px-4" type="submit" id="submit-btn">Notify Me</button>
                             </form>
-                            <div id="success-message" class="text-success mt-2 fw-medium small d-none text-start text-center text-lg-start">
+                            <div id="success-message" class="text-success mt-2 fw-medium small d-none text-start">
                                 <i class="bi bi-check-circle-fill me-1"></i> Thank you! We will keep you updated.
                             </div>
                         </div>
 
                         <div class="pt-2">
-                            <p class="small text-white-50 mb-2">Help us build the perfect tool—take our quick surveys:</p>
+                            <p class="small text-white-50 mb-2">Take our quick surveys to help us build the tool perfect for you:</p>
                             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdonp7cRmuj7BnrqYJBk_n5MveFS3REzrMwDlTHEsAocTo1lQ/viewform?usp=dialog" target="_blank" class="btn btn-glow text-center"><i class="bi bi-person-workspace me-2"></i>Researcher Survey</a>
-                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfIQDTNsQC_Ih_5smLiGJqzh71TmMlME3sVGvstrOmsVBXUQQ/viewform?usp=publish-editor" target="_blank" class="btn btn-outline-glass text-center"><i class="bi bi-clipboard-data me-2"></i>PI Survey</a>
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfIQDTNsQC_Ih_5smLiGJqzh71TmMlME3sVGvstrOmsVBXUQQ/viewform?usp=publish-editor" target="_blank" class="btn btn-outline-glass-alt text-center"><i class="bi bi-clipboard-data me-2"></i>PI Survey</a>
                             </div>
                         </div>
-                    <div class="mt-2 text-center text-lg-start" style="font-size: 11px; opacity: 0.6;">
-                        By clicking Notify Me, you agree to our
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="text-white text-decoration-underline">Privacy Policy</a>.
-                    </div>
+                        <div class="mt-2 text-center text-lg-start" style="font-size: 11px; opacity: 0.6;">
+                            By clicking Notify Me, you agree to our
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="text-white text-decoration-underline">Privacy Policy</a>.
+                        </div>
                     </div>
 
                     <div class="col-lg-6">
@@ -368,8 +592,8 @@
                                 <div class="position-absolute end-0 me-3">
                                     <span class="badge rounded-pill live-badge px-2 py-1 px-sm-3 py-sm-1.5 d-flex align-items-center gap-1 gap-sm-2">
                                         <span class="position-relative d-flex" style="width: 6px; height: 6px;">
-                                            <span class="ping position-absolute h-100 w-100 rounded-full bg-white opacity-75"></span>
-                                            <span class="rounded-full h-100 w-100 bg-white" style="border-radius: 50%;"></span>
+                                            <span class="ping position-absolute h-100 w-100 rounded-pill bg-white opacity-75"></span>
+                                            <span class="rounded-pill h-100 w-100 bg-white" style="border-radius: 50%;"></span>
                                         </span>
                                         LIVE
                                     </span>
@@ -382,79 +606,124 @@
             </div>
         </header>
 
-        <section id="mission" class="mission-section">
-            <div class="container" style="position: relative; z-index: 2;">
-                <div class="row align-items-center g-5">
-                    <div class="col-lg-6 text-center text-lg-start">
-                        <h6 class="fw-bold mb-3" style="letter-spacing: 3px; font-size: 11px; color: var(--primary-cyan);">OUR MISSION</h6>
-                        <h2 class="display-6 fw-bold mb-3" style="letter-spacing: -0.5px;">Eliminating Analysis Debt</h2>
-                        <p class="opacity-75 mb-5 fs-6 fs-md-5">Bridging the gap between raw data and discovery with a modular, transparent engine.</p>
+        <!-- MODULES -->
+        <section id="modules" class="content-section">
+            <div class="container text-center">
+                <h6 class="fw-bold mb-3" style="letter-spacing: 3px; font-size: 11px; color: var(--accent-light);">SPECIALIZED MODULES</h6>
+                <h2 class="display-6 fw-bold mb-3 section-title">Choose Your Experiment Type</h2>
+                <p class="lead opacity-75 mb-5 mx-auto section-subtitle" style="max-width: 650px;">
+                    Pick the module that matches your assay. Each one ships with validated defaults tuned to that specific experiment — no configuration needed.
+                </p>
 
-                        <div class="row g-4 text-start">
-                            <div class="col-md-6">
-                                <div class="glass-card p-4 h-100">
-                                    <div class="icon-circle mb-3"><i class="bi bi-gear-wide-connected"></i></div>
-                                    <h5 class="fw-bold fs-6 mb-2">Zero-Code Management</h5>
-                                    <p class="opacity-50 small mb-0" style="line-height: 1.6;">Automated QC and alignment blocks without writing code.</p>
-                                </div>
+                <div class="row g-4 text-start">
+                    <div class="col-md-4">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="icon-circle flex-shrink-0"><i class="bi bi-scissors"></i></div>
+                                <div><span class="module-tag">Sequencing</span></div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="glass-card p-4 h-100">
-                                    <div class="icon-circle mb-3"><i class="bi bi-shield-check"></i></div>
-                                    <h5 class="fw-bold fs-6 mb-2">Validated Pipelines</h5>
-                                    <p class="opacity-50 small mb-0" style="line-height: 1.6;">Rigorous pipelines constantly benchmarked vs. ground-truth data.</p>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="glass-card p-4 d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-4">
-                                    <div class="icon-circle flex-shrink-0"><i class="bi bi-box-arrow-up-right"></i></div>
-                                    <div>
-                                        <h5 class="fw-bold fs-6 mb-1">Scalable Bio-Data Discovery</h5>
-                                        <p class="opacity-50 small mb-0" style="line-height: 1.6;">Seamlessly scale from single-cell insight to full multi-omics interactive visuals.</p>
-                                    </div>
-                                </div>
+                            <h3 class="h4 fw-bold mb-2">CRISPR Screen</h3>
+                            <p class="opacity-75 small mb-3" style="line-height: 1.7;">
+                                Designed for CRISPR knockout, activation, and inhibition screens. From MAGeCK-based counting to hit ranking — one click, no parameters to tune.
+                            </p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">MAGeCK</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">sgRNA</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">Hit Ranking</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-6 ps-lg-5">
-                        <div class="glass-card p-4" style="background: rgba(13, 10, 37, 0.4) !important;">
-                            <div class="d-flex flex-column gap-2 text-start">
+                    <div class="col-md-4">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="icon-circle flex-shrink-0"><i class="bi bi-bar-chart-line"></i></div>
+                                <div><span class="module-tag">Prediction</span></div>
+                            </div>
+                            <h3 class="h4 fw-bold mb-2">ML Prediction</h3>
+                            <p class="opacity-75 small mb-3" style="line-height: 1.7;">
+                                No ML knowledge required. Upload your data, tell us what to predict, and the module handles the rest — model selection, validation, and visual results.
+                            </p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">No Code</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">Auto Model</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.15);">Visual Results</span>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="pipeline-box d-flex flex-column flex-sm-row align-items-center gap-3 p-3 rounded-3 border border-white border-opacity-10" style="background: rgba(255,255,255,0.02);">
-                                    <div class="icon-circle" style="width:36px; height:36px; background: rgba(255,255,255,0.05) !important; color: #fff !important; font-size: 1rem;"><i class="bi bi-hdd-network"></i></div>
-                                    <div class="fw-bold font-monospace text-white-50 text-center text-sm-start" style="font-size: 12px; letter-spacing: 0.5px;">INPUT: RAW BIOTECH DATA</div>
-                                </div>
-
-                                <div class="text-center my-1 opacity-25 text-info"><i class="bi bi-chevron-down fs-5"></i></div>
-
-                                <div class="pipeline-box active d-flex flex-column flex-sm-row align-items-center gap-3 p-3 rounded-3 border border-info border-opacity-30" style="background: rgba(0, 242, 254, 0.05) !important;">
-                                    <div class="icon-circle" style="width:36px; height:36px; background: var(--primary-cyan) !important; color: #0a081d !important; font-size: 1rem; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);"><i class="bi bi-cpu"></i></div>
-                                    <div class="fw-bold font-monospace text-center text-sm-start" style="font-size: 12px; letter-spacing: 0.5px; color: var(--primary-cyan);">ENJOYTHELAB ENGINE</div>
-                                </div>
-
-                                <div class="text-center my-1 opacity-25 text-info"><i class="bi bi-chevron-down fs-5"></i></div>
-
-                                <div class="pipeline-box d-flex flex-column flex-sm-row align-items-center gap-3 p-3 rounded-3 border border-white border-opacity-10" style="background: rgba(255,255,255,0.02);">
-                                    <div class="icon-circle" style="width:36px; height:36px; background: rgba(255,255,255,0.05) !important; color: #fff !important; font-size: 1rem;"><i class="bi bi-journal-check"></i></div>
-                                    <div class="fw-bold font-monospace text-white-50 text-center text-sm-start" style="font-size: 12px; letter-spacing: 0.5px;">OUTPUT: INSIGHTS & MANAGEMENT</div>
-                                </div>
-
+                    <div class="col-md-4">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="icon-circle flex-shrink-0"><i class="bi bi-plus-circle"></i></div>
+                                <div><span class="module-tag">Coming Soon</span></div>
+                            </div>
+                            <h3 class="h4 fw-bold mb-2">More Assays</h3>
+                            <p class="opacity-75 small mb-3" style="line-height: 1.7;">
+                                RNA-seq differential expression, image quantification (western blot, microscopy). Each with defaults matched to the assay — just upload and go.
+                            </p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge rounded-pill" style="background: var(--bg-glass-strong); color: var(--text-muted); border: 1px solid var(--border-glass);">RNA-seq</span>
+                                <span class="badge rounded-pill" style="background: var(--bg-glass-strong); color: var(--text-muted); border: 1px solid var(--border-glass);">Western Blot</span>
+                                <span class="badge rounded-pill" style="background: var(--bg-glass-strong); color: var(--text-muted); border: 1px solid var(--border-glass);">Microscopy</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- CTA -->
+        <section id="cta" class="cta-section">
+            <div class="container text-center">
+                <h2 class="display-4 fw-bold mb-4 section-title">Ready to Skip the Config?</h2>
+                <p class="lead opacity-75 mb-5 mx-auto" style="max-width: 550px;">
+                    Pick your experiment, upload your data, and get results tuned to your assay. No pipeline assembly required.
+                </p>
+
+                <div class="mb-5 mx-auto" style="max-width: 480px;">
+                    <p class="text-white-50 fw-medium mb-3" style="font-size: 13px;">Be the first to know when we launch:</p>
+                    <form id="cta-gform" class="input-group notify-form w-100">
+                        <input type="email" id="cta-email-field" class="form-control form-control-lg fs-6" placeholder="Enter your email..." aria-label="Email" required>
+                        <button class="btn px-4" type="submit" id="cta-submit-btn">Notify Me</button>
+                    </form>
+                    <div id="cta-success-message" class="text-success mt-2 fw-medium small d-none">
+                        <i class="bi bi-check-circle-fill me-1"></i> Thank you! We will keep you updated.
+                    </div>
+                    <div class="mt-2" style="font-size: 11px; opacity: 0.6;">
+                        By clicking, you agree to our
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="text-white text-decoration-underline">Privacy Policy</a>.
+                    </div>
+                </div>
+
+                <hr class="mx-auto opacity-25 mb-5" style="max-width: 200px; border-color: var(--accent);">
+
+                <p class="text-white-50 fw-medium mb-4" style="font-size: 13px;">Already have an account?</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="https://enjoythelab.com/user/login/" class="btn-cta-primary">
+                        <i class="bi bi-box-arrow-in-right fs-5"></i>
+                        Login
+                    </a>
+                    <a href="https://enjoythelab.com/" class="btn-cta-secondary">
+                        <i class="bi bi-play-circle fs-5"></i>
+                        Try Live Demo
+                    </a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-  <footer class="text-center text-white-50 small">
+    <footer class="text-center text-white-50 small">
         <div class="container">
             <p class="mb-1">&copy; 2026 EnjoyTheLab. All rights reserved.</p>
             <p class="mb-0" style="font-size: 11px; opacity: 0.7;">
                 EnjoyTheLab is a pre-launch project.
                 <span class="mx-1">|</span>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="text-white-50 text-decoration-underline">Privacy Policy</a>            </p>
+                <a href="mailto:admin@enjoythelab.com" class="text-white-50 text-decoration-underline">Contact</a>
+                <span class="mx-1">|</span>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="text-white-50 text-decoration-underline">Privacy Policy</a>
+            </p>
         </div>
     </footer>
 
@@ -463,72 +732,91 @@
     <script>
         document.getElementById('ajax-gform').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const btn = document.getElementById('submit-btn');
             const emailInput = document.getElementById('email-field');
             const successMsg = document.getElementById('success-message');
-
             btn.innerText = 'Sending...';
             btn.disabled = true;
-
             const url = 'https://docs.google.com/forms/d/e/1FAIpQLSdqYqrIWB45Uev9rVE5QkPoJXVfks5R4c3egXK3qtQ4ilB8fQ/formResponse';
-
             const params = new URLSearchParams();
             params.append('entry.566836944', emailInput.value);
-
-            fetch(url, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params
-            })
+            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params })
             .then(() => {
-                btn.innerText = 'Notify Me';
-                btn.disabled = false;
-                emailInput.value = '';
-                successMsg.classList.remove('d-none');
+                btn.innerText = 'Notify Me'; btn.disabled = false; emailInput.value = ''; successMsg.classList.remove('d-none');
             })
-            .catch((err) => {
-                console.error(err);
-                btn.innerText = 'Notify Me';
-                btn.disabled = false;
-            });
+            .catch((err) => { console.error(err); btn.innerText = 'Notify Me'; btn.disabled = false; });
+        });
+
+        document.getElementById('cta-gform').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('cta-submit-btn');
+            const emailInput = document.getElementById('cta-email-field');
+            const successMsg = document.getElementById('cta-success-message');
+            btn.innerText = 'Sending...';
+            btn.disabled = true;
+            const url = 'https://docs.google.com/forms/d/e/1FAIpQLSdqYqrIWB45Uev9rVE5QkPoJXVfks5R4c3egXK3qtQ4ilB8fQ/formResponse';
+            const params = new URLSearchParams();
+            params.append('entry.566836944', emailInput.value);
+            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params })
+            .then(() => {
+                btn.innerText = 'Notify Me'; btn.disabled = false; emailInput.value = ''; successMsg.classList.remove('d-none');
+            })
+            .catch((err) => { console.error(err); btn.innerText = 'Notify Me'; btn.disabled = false; });
         });
     </script>
-<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content text-start text-white" style="background: #0d0b21; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 1.25rem; backdrop-filter: blur(20px);">
-            <div class="modal-header border-bottom border-white border-opacity-10 py-3">
-                <h5 class="modal-title fw-bold" id="privacyModalLabel" style="font-family: 'Outfit', sans-serif; color: #00f2fe;">Privacy Policy</h5>
-                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4 fs-6 opacity-75" style="max-height: 60vh; overflow-y: auto; line-height: 1.6;">
-                <p class="small text-white-50">Last updated: May 2026</p>
 
-                <h6 class="text-white fw-bold mt-4 mb-2">1. Data Controller</h6>
-                <p>Pending corporate incorporation of the project, the Data Controller is Elisa Nicolini, operating from Trento, Italy. Contact email: admin@enjoythelab.com.</p>
+    <script>
+        function initTheme() {
+            var stored = localStorage.getItem('theme');
+            var theme = stored || 'light';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            var icon = document.querySelector('#theme-toggle i');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+            }
+        }
+        function toggleTheme() {
+            var html = document.documentElement;
+            var current = html.getAttribute('data-bs-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', next);
+            localStorage.setItem('theme', next);
+            var icon = document.querySelector('#theme-toggle i');
+            if (icon) {
+                icon.className = next === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+            }
+        }
+        initTheme();
+        window.addEventListener('pageshow', initTheme);
+    </script>
 
-                <h6 class="text-white fw-bold mt-4 mb-2">2. Types of Data Collected</h6>
-                <p>We collect personal data that you voluntarily provide to us, including your electronic mail (email address) via our notification form, and professional roles or workflow preferences via our feedback surveys.</p>
-
-                <h6 class="text-white fw-bold mt-4 mb-2">3. Purpose and Legal Basis</h6>
-                <p>Your data is processed exclusively to provide project updates, announce our beta launch, and analyze market requirements for biotech data infrastructure. The legal basis for this processing is your explicit, revocable consent.</p>
-
-                <h6 class="text-white fw-bold mt-4 mb-2">4. Third-Party Processors</h6>
-                <p>Data collection infrastructure is supported by Google Forms (Google LLC). Data is stored securely in accordance with Google's robust privacy and GDPR compliance frameworks. Data may be processed on servers located outside the European Economic Area by Google LLC in accordance with the European Commission’s Standard Contractual Clauses and GDPR compliance mechanisms.</p>
-
-                <h6 class="text-white fw-bold mt-4 mb-2">5. Data Retention & Your Rights</h6>
-                <p>We keep your email for a maximum of 24 months or until you request its removal. Under the GDPR, you retain full rights to access, rectify, or request deletion of your personal data ("right to be forgotten") of your data at any time by contacting us via email. You also have the right to lodge a complaint with the Italian Data Protection Authority (Garante per la protezione dei dati personali).</p>
-            </div>
-            <div class="modal-footer border-top border-white border-opacity-10 py-2">
-                <button type="button" class="btn btn-sm px-4 rounded-pill btn-outline-glass" data-bs-dismiss="modal" style="font-size:13px;">Close</button>
+    <!-- Privacy Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content text-start text-white" style="background: var(--bg-modal); border: 1px solid var(--border-glass-heavy); border-radius: 1.25rem; backdrop-filter: blur(20px);">
+                <div class="modal-header border-bottom border-white border-opacity-10 py-3">
+                    <h5 class="modal-title fw-bold" id="privacyModalLabel" style="font-family: 'Outfit', sans-serif; color: var(--accent-light);">Privacy Policy</h5>
+                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 fs-6 opacity-75" style="max-height: 60vh; overflow-y: auto; line-height: 1.6;">
+                    <p class="small text-white-50">Last updated: May 2026</p>
+                    <h6 class="text-white fw-bold mt-4 mb-2">1. Data Controller</h6>
+                    <p>Pending corporate incorporation of the project, the Data Controller is Elisa Nicolini, operating from Trento, Italy. Contact email: admin@enjoythelab.com.</p>
+                    <h6 class="text-white fw-bold mt-4 mb-2">2. Types of Data Collected</h6>
+                    <p>We collect personal data that you voluntarily provide to us, including your electronic mail (email address) via our notification form, and professional roles or workflow preferences via our feedback surveys.</p>
+                    <h6 class="text-white fw-bold mt-4 mb-2">3. Purpose and Legal Basis</h6>
+                    <p>Your data is processed exclusively to provide project updates, announce our beta launch, and analyze market requirements for biotech data infrastructure. The legal basis for this processing is your explicit, revocable consent.</p>
+                    <h6 class="text-white fw-bold mt-4 mb-2">4. Third-Party Processors</h6>
+                    <p>Data collection infrastructure is supported by Google Forms (Google LLC). Data is stored securely in accordance with Google's robust privacy and GDPR compliance frameworks. Data may be processed on servers located outside the European Economic Area by Google LLC in accordance with the European Commission's Standard Contractual Clauses and GDPR compliance mechanisms.</p>
+                    <h6 class="text-white fw-bold mt-4 mb-2">5. Data Retention & Your Rights</h6>
+                    <p>We keep your email for a maximum of 24 months or until you request its removal. Under the GDPR, you retain full rights to access, rectify, or request deletion of your personal data ("right to be forgotten") at any time by contacting us via email. You also have the right to lodge a complaint with the Italian Data Protection Authority (Garante per la protezione dei dati personali).</p>
+                </div>
+                <div class="modal-footer border-top border-white border-opacity-10 py-2">
+                    <button type="button" class="btn btn-sm px-4 rounded-pill btn-outline-glass" data-bs-dismiss="modal" style="font-size:13px;">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
 </body>
 </html>
