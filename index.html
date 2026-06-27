@@ -74,10 +74,10 @@
             --accent: #7c3aed;
             --accent-hover: #6d28d9;
             --accent-light: #8b5cf6;
-            --accent-glow: rgba(124, 58, 237, 0.3);
+            --accent-glow: rgba(124, 58, 237, 0.55);
             --accent-bg: rgba(124, 58, 237, 0.08);
-            --logo-enjoy: #0d9488;
-            --logo-thelab: #0284c7;
+            --logo-enjoy: #00cccc;
+            --logo-thelab: #abefff;
             --success: #059669;
             --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
             --shadow-glow: 0 4px 15px 0 rgba(124, 58, 237, 0.2);
@@ -143,6 +143,9 @@
 
         .enjoy-big { font-family: 'JetBrains Mono', monospace; color: var(--logo-enjoy); font-weight: 700; }
         .the-lab-big { font-family: 'Outfit', sans-serif; color: var(--logo-thelab); font-weight: 900; letter-spacing: -0.5px; }
+
+        .brand-enjoy { font-family: 'JetBrains Mono', monospace; color: var(--logo-enjoy); font-weight: 700; display: inline; }
+        .brand-thelab { font-family: 'Outfit', sans-serif; color: var(--logo-thelab); font-weight: 800; letter-spacing: -0.3px; display: inline; }
 
         .glass-nav {
             background-color: var(--bg-navbar) !important;
@@ -448,6 +451,10 @@
             filter: none;
         }
 
+        [data-bs-theme="dark"] .sticky-bg-logo {
+            opacity: 0.2;
+        }
+
         [data-bs-theme="light"] .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
@@ -594,7 +601,7 @@
                         </div>
 
                         <div class="pt-2">
-                            <p class="small text-white-50 mb-2">Take our quick surveys to help us build the tool perfect for you:</p>
+                            <p class="small text-white-50 mb-2">Take our quick surveys to help us build the perfect tool for you:</p>
                             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdonp7cRmuj7BnrqYJBk_n5MveFS3REzrMwDlTHEsAocTo1lQ/viewform?usp=dialog" target="_blank" class="btn btn-glow text-center"><i class="bi bi-person-workspace me-2"></i>Researcher Survey</a>
                                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfIQDTNsQC_Ih_5smLiGJqzh71TmMlME3sVGvstrOmsVBXUQQ/viewform?usp=publish-editor" target="_blank" class="btn btn-outline-glass-alt text-center"><i class="bi bi-clipboard-data me-2"></i>PI Survey</a>
@@ -621,7 +628,7 @@
                                             <span class="ping position-absolute h-100 w-100 rounded-pill bg-white opacity-75"></span>
                                             <span class="rounded-pill h-100 w-100 bg-white" style="border-radius: 50%;"></span>
                                         </span>
-                                        LIVE
+                                        DEMO
                                     </span>
                                 </div>
                             </div>
@@ -638,7 +645,7 @@
                 <h2 class="display-6 fw-bold mb-3 section-title">Stop switching between tools. Upload your data. Analyze it. Keep every result in one place.</h2>
                 <h6 class="fw-bold mb-3" style="letter-spacing: 3px; font-size: 11px; color: var(--accent-light);">SPECIALIZED MODULES</h6>
                 <p class="lead opacity-75 mb-5 mx-auto" style="max-width: 700px; line-height: 1.7;">
-                    Run complex computational analyses on your own. Go beyond the result: easily validate the quality and reliability of your experiments. We live in the age of data. It's time biology had technology that can match.
+                    Run complex computational analyses on your own. Go beyond the result: easily validate the quality and reliability of your experiments. We live in the age of data. It's time for biology to have the technology that can match.
                 </p>
 
                 <div class="row g-4 text-start">
@@ -713,10 +720,64 @@
             </div>
         </section>
 
+<section id="team" class="content-section">
+    <div class="container text-center" style="margin-top: auto; margin-bottom: auto;">
+        <h2 class="display-6 fw-bold mb-3 section-title">Built by scientists, for scientists.</h2>
+        <p class="lead opacity-75 mb-2 mx-auto" style="max-width: 750px; line-height: 1.7;">
+            We know the struggle: spending weeks patching together broken command-line tools instead of doing science.
+            <strong><span class="brand-enjoy">Enjoy</span><span class="brand-thelab">TheLab</span></strong> was born from the friction we encounter daily as the solution we desperately need. Now we are making it available to the scientific community.
+        </p>
+        <p class="opacity-50 mb-5 mx-auto small" style="max-width: 650px;">
+            A specialized team from the University of Trento (UniTn), bridging world-class biomedical research with state-of-the-art computational biology.
+        </p>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-4 text-center h-100">
+                    <img src="people/elisa.png" alt="Elisa Nicolini" class="rounded-circle mx-auto mb-3 d-block" style="width: 100px; height: 100px; object-fit: cover; object-position: center;">
+                    <h5 class="fw-bold mb-1" style="color: var(--accent-light);">Elisa Nicolini</h5>
+                    <p class="small opacity-75 mb-0 fw-semibold text-uppercase tracking-wider" style="font-size: 0.75rem; color: #00cccc;">Co-Founder & CEO</p>
+                    <p class="small opacity-50 mt-2 mb-0" style="line-height: 1.5;">PhD researcher at Biasini's Lab (UniTn). Spent years at the bench wrestling with fragmented data; now engineering the platform she wished she had to accelerate discovery.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-4 text-center h-100">
+                    <img src="people/giacomo.png" alt="Giacomo Fantoni" class="rounded-circle mx-auto mb-3 d-block" style="width: 100px; height: 100px; object-fit: cover; object-position: center;">
+                    <h5 class="fw-bold mb-1" style="color: var(--accent-light);">Giacomo Fantoni</h5>
+                    <p class="small opacity-75 mb-0 fw-semibold text-uppercase tracking-wider" style="font-size: 0.75rem; color: #a78bfa;">Co-Founder & CTO</p>
+                    <p class="small opacity-50 mt-2 mb-0" style="line-height: 1.5;">PhD researcher at Marchetti's Lab (UniTn). Computational biologist specializing in automation pipelines. Turns complex code into reliable, one-click infrastructure.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-4 text-center h-100">
+                    <img src="people/luca.png" alt="Luca Marchetti" class="rounded-circle mx-auto mb-3 d-block" style="width: 100px; height: 100px; object-fit: cover; object-position: center;">
+                    <h5 class="fw-bold mb-1" style="color: var(--accent-light);">Luca Marchetti</h5>
+                    <p class="small opacity-75 mb-0 fw-semibold text-uppercase tracking-wider" style="font-size: 0.75rem; color: #34d399;">Scientific Advisor</p>
+                    <p class="small opacity-50 mt-2 mb-0" style="line-height: 1.5;">Principal Investigator at UniTn. Renowned expert in computational and systems biology, ensuring the algorithmic integrity and mathematical rigor of our platform.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-4 text-center h-100">
+                    <img src="people/emiliano.png" alt="Prof. Emiliano Biasini" class="rounded-circle mx-auto mb-3 d-block" style="width: 100px; height: 100px; object-fit: cover; object-position: center; background: #fff;">
+                        <h5 class="fw-bold mb-1" style="color: var(--accent-light);">Emiliano Biasini</h5>
+                        <p class="small opacity-75 mb-0 fw-semibold text-uppercase tracking-wider" style="font-size: 0.75rem; color: #f472b6;">Scientific Advisor</p>
+                        <p class="small opacity-50 mt-2 mb-0" style="line-height: 1.5;">Principal Investigator at CIBIO (UniTn). Expert biochemist and neuroscientist, grounding our product-market fit in the strict realities of top-tier wet labs.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
         <!-- CTA -->
         <section id="cta" class="cta-section">
-            <div class="container text-center">
-                <h2 class="display-4 fw-bold mb-4 section-title">We're Launching Soon.</h2>
+    <div class="container text-center" style="margin-top: auto; margin-bottom: auto;">
+        <h2 class="display-4 fw-bold mb-4 section-title">We're Launching Soon.</h2>
                 <p class="lead opacity-75 mb-5 mx-auto" style="max-width: 550px;">
                     The first no-code platform built for wet-lab academia is almost here. Drop your email and we'll contact you the moment we go on-line.
                 </p>
@@ -744,9 +805,9 @@
 
     <footer class="text-center text-white-50 small">
         <div class="container">
-            <p class="mb-1">&copy; 2026 EnjoyTheLab. All rights reserved.</p>
+            <p class="mb-1">&copy; 2026 <span class="brand-enjoy">Enjoy</span><span class="brand-thelab">TheLab</span>. All rights reserved.</p>
             <p class="mb-0" style="font-size: 11px; opacity: 0.7;">
-                EnjoyTheLab is a pre-launch project.
+                <span class="brand-enjoy">Enjoy</span><span class="brand-thelab">TheLab</span> is a pre-launch project.
                 <span class="mx-1">|</span>
                 <a href="mailto:admin@enjoythelab.com" class="text-white-50 text-decoration-underline">Contact</a>
                 <span class="mx-1">|</span>
