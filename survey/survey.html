@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnjoyTheLab — Research & PI Survey</title>
+
+    <!-- Google Fonts & Bootstrap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0d0b28 0%, #221668 50%, #121036 100%);
+            --card-bg: rgba(20, 17, 58, 0.75);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --brand-enjoy: #5cc9ca;
+            --brand-thelab: #abe6ff;
+            --option-bg: rgba(255, 255, 255, 0.04);
+            --option-border: rgba(255, 255, 255, 0.08);
+        }
+
+        html, body {
+            background: #0d0b28 !important;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--bg-gradient) !important;
+            background-attachment: fixed !important;
+        }
+
+        /* --- SPLASH SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient) !important;
+            z-index: 99999;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .splash-logo-img { max-width: 150px; margin-bottom: 20px; }
+        .splash-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+            margin-top: 4px;
+        }
+
+        .brand-text .enjoy { font-family: 'JetBrains Mono', monospace; color: #ffffff; font-weight: 700; }
+        .brand-text .thelab {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--brand-thelab) 0%, var(--brand-enjoy) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;
+        }
+
+        /* --- PROGRESS BAR WITH RUNNING LOGO --- */
+        .progress-track-container {
+            position: relative; width: 100%; height: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px; border: 1px solid var(--card-border);
+            margin: 15px 0 25px 0; padding: 2px;
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--brand-enjoy), var(--brand-thelab));
+            border-radius: 30px; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 12px rgba(92, 201, 202, 0.5);
+        }
+        .progress-logo-runner {
+            position: absolute; top: 50%; left: 0%;
+            transform: translate(-50%, -50%);
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10; pointer-events: none;
+        }
+        .progress-logo-runner img {
+            height: 32px; width: auto;
+            filter: drop-shadow(0px 4px 10px rgba(92, 201, 202, 0.7));
+        }
+
+        /* --- ROLE CARDS --- */
+        .role-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+            border-radius: 20px; padding: 32px 24px; cursor: pointer;
+            transition: all 0.3s ease; text-align: center; height: 100%;
+            position: relative; overflow: hidden;
+        }
+        .role-card:hover {
+            border-color: var(--brand-enjoy); background: rgba(92, 201, 202, 0.08);
+            transform: translateY(-4px); box-shadow: 0 12px 30px rgba(92, 201, 202, 0.25);
+        }
+
+        /* --- IMAGE / GIF CONTAINER --- */
+        .q-img-box {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+        }
+        .q-img-box img {
+            max-width: 100%;
+            height: auto;
+            max-height: 320px;
+            object-fit: contain;
+            display: block;
+            border-radius: 10px;
+        }
+
+        /* --- OPTIONS STYLING --- */
+        .option-wrapper { margin-bottom: 10px; }
+
+        .survey-option-check {
+            display: flex; align-items: center; padding: 15px 20px;
+            background: var(--option-bg); border: 1px solid var(--option-border);
+            border-radius: 14px; cursor: pointer; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #e2e8f0; font-size: 0.98rem; font-weight: 500; user-select: none;
+        }
+        .survey-option-check:hover {
+            border-color: rgba(92, 201, 202, 0.4); background: rgba(92, 201, 202, 0.08);
+            transform: translateX(4px);
+        }
+        .survey-option-check.selected {
+            border-color: var(--brand-enjoy); background: rgba(92, 201, 202, 0.15);
+            box-shadow: 0 4px 20px rgba(92, 201, 202, 0.15); color: #ffffff;
+        }
+        .survey-option-check input {
+            margin-right: 14px; accent-color: var(--brand-enjoy);
+            width: 20px; height: 20px; cursor: pointer;
+        }
+
+        /* --- SCALE STYLING (1-5 Horizontal) --- */
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .scale-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .scale-box {
+            width: 100%;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid var(--option-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            transition: all 0.25s ease;
+        }
+        .scale-item:hover .scale-box {
+            border-color: var(--brand-enjoy);
+            background: rgba(92, 201, 202, 0.12);
+            transform: translateY(-2px);
+        }
+        .scale-item.selected .scale-box {
+            background: var(--brand-enjoy);
+            border-color: var(--brand-enjoy);
+            color: #0b0921;
+            box-shadow: 0 0 15px rgba(92, 201, 202, 0.4);
+        }
+        .scale-label {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            line-height: 1.25;
+            font-weight: 500;
+        }
+
+        /* --- OTHER INPUT FIELD --- */
+        .other-input-container {
+            display: none;
+            margin-top: 8px;
+            padding-left: 10px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .q-step { display: none; }
+        .q-step.active { display: block; animation: slideIn 0.35s ease forwards; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(18px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .btn-enjoy {
+            background: linear-gradient(135deg, var(--brand-enjoy), #41a1a2);
+            color: #0a0819; font-weight: 700; border: none; border-radius: 12px;
+            padding: 12px 30px; transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(92, 201, 202, 0.3);
+        }
+        .btn-enjoy:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92, 201, 202, 0.4); color: #0a0819; }
+
+        .form-control-enjoy {
+            background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border);
+            color: #ffffff; border-radius: 12px; padding: 12px 16px; font-size: 0.95rem;
+        }
+        .form-control-enjoy:focus {
+            background: rgba(255, 255, 255, 0.1); border-color: var(--brand-enjoy);
+            color: #ffffff; box-shadow: 0 0 0 3px rgba(92, 201, 202, 0.25);
+        }
+
+        /* --- CUSTOM AUTOCOMPLETE DROPDOWN --- */
+        .uni-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 220px;
+            overflow-y: auto;
+            background: #181443;
+            border: 1px solid var(--brand-enjoy);
+            border-radius: 12px;
+            z-index: 1050;
+            margin-top: 6px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+        .uni-dropdown-item {
+            padding: 12px 16px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.15s ease;
+        }
+        .uni-dropdown-item:hover {
+            background: rgba(92, 201, 202, 0.2);
+            color: #ffffff;
+        }
+        .uni-dropdown-item.other-item {
+            font-weight: 600;
+            color: var(--brand-enjoy);
+            background: rgba(92, 201, 202, 0.08);
+        }
+
+        /* --- CARDS FOR CONTACT STEP & SUCCESS --- */
+        .card-launch-notify {
+            background: linear-gradient(135deg, rgba(92, 201, 202, 0.15) 0%, rgba(171, 230, 255, 0.08) 100%);
+            border: 1px solid rgba(92, 201, 202, 0.35);
+            border-radius: 16px;
+            padding: 18px 20px;
+        }
+        .card-privacy-notice {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 14px 18px;
+        }
+
+        .success-icon-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .success-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, rgba(92, 201, 202, 0.45) 0%, rgba(92, 201, 202, 0) 70%);
+            border-radius: 50%;
+            filter: blur(18px);
+            z-index: 0;
+            animation: pulseGlow 2.5s infinite alternate ease-in-out;
+        }
+        @keyframes pulseGlow {
+            from { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; }
+            to { transform: translate(-50%, -50%) scale(1.25); opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOADING SCREEN (shown only while data loads) -->
+    <div id="splash-screen">
+        <img src="images/nome.001.png" alt="EnjoyTheLab Logo" class="splash-logo-img" onerror="this.src='logo.png'">
+        <h1 class="brand-text display-5">
+            <span class="enjoy">Enjoy</span><span class="thelab">TheLab</span>
+        </h1>
+        <p class="splash-label mb-0">Loading&hellip;</p>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="position-relative min-vh-100 d-flex align-items-center justify-content-center py-4">
+        <div class="container px-md-5 z-1 my-auto">
+            
+            <!-- HEADER -->
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-lg-8">
+                    <div class="mb-2">
+                        <img src="images/nome.001.png" alt="EnjoyTheLab" class="img-fluid mb-1" style="max-height: 55px;" onerror="this.src='logo.png'">
+                        <h2 class="brand-text h4 mb-0"><span class="enjoy">Enjoy</span><span class="thelab">TheLab</span></h2>
+                    </div>
+                    <p class="fs-6 text-muted mb-0">Help us design the ultimate data analysis platform for your research.</p>
+                </div>
+            </div>
+
+            <!-- SURVEY CONTAINER -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-7">
+                    <div class="p-4 p-md-5" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);">
+                        
+                        <!-- STEP 1: ROLE SELECTION -->
+<div id="step-role-selection">
+    
+    <!-- TESTI INIZIALI -->
+    <div class="text-center mb-4">
+        <span class="badge bg-secondary-subtle text-brand-enjoy px-3 py-2 rounded-pill mono-text mb-3">WELCOME</span>
+        
+        <!-- FRASI INGLESI IN SEQUENZA -->
+        <h3 class="h3 text-white fw-bold mb-2">
+            Thank you for helping us!
+        </h3>
+        <p class="text-white-50 fs-5 mb-2">
+            Please complete the survey below.
+        </p>
+        <p class="text-muted small fst-italic">
+            Let's get started... from the beginning!
+        </p>
+    </div>
+
+    <!-- SELEZIONE RUOLO -->
+    <div class="text-center mb-3">
+        <p class="small text-muted text-uppercase fw-semibold mb-2">Select your role to start:</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="role-card" onclick="startSurvey('researcher')">
+                <div class="mb-2">
+                    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-1 small">
+                        <i class="bi bi-clock me-1"></i> ~3 - 4 min
+                    </span>
+                </div>
+                <i class="bi bi-journal-code text-brand-enjoy fs-1 mb-2 d-block"></i>
+                <h4 class="h5 text-white fw-bold mb-1">Researcher / User</h4>
+                <p class="small text-muted mb-0">PhD Student, Postdoc, Research Fellow, Lab Tech, or Student.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="role-card" onclick="startSurvey('pi')">
+                <div class="mb-2">
+                    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-1 small">
+                        <i class="bi bi-clock me-1"></i> ~3 - 4 min
+                    </span>
+                </div>
+                <i class="bi bi-person-badge text-brand-thelab fs-1 mb-2 d-block"></i>
+                <h4 class="h5 text-white fw-bold mb-1">Principal Investigator (PI)</h4>
+                <p class="small text-muted mb-0">Group Leader, Head of Laboratory, or Professor.</p>
+            </div>
+        </div>
+    </div>
+
+</div><head>
+
+                        <!-- SURVEY WIZARD -->
+                        <div id="survey-wizard" style="display: none;">
+                            
+                            <!-- PROGRESS BAR -->
+                            <div class="d-flex justify-content-between align-items-center text-muted small mono-text mb-1">
+                                <span id="q-counter">Question 1 of 17</span>
+                                <span id="q-percent">6%</span>
+                            </div>
+                            <div class="progress-track-container">
+                                <div class="progress-fill" id="progress-fill"></div>
+                                <div class="progress-logo-runner" id="progress-runner">
+                                    <img src="images/nome.001.png" alt="logo" onerror="this.src='logo.png'">
+                                </div>
+                            </div>
+
+                            <!-- VALIDATION WARNING ALERT -->
+                            <div id="validation-warning" class="alert alert-warning border-0 rounded-3 text-white fw-semibold d-none align-items-center gap-2 mb-3 py-2 px-3 small">
+                                <i class="bi bi-exclamation-triangle-fill fs-5 text-warning-emphasis"></i>
+                                <span id="validation-warning-msg">Please select an option to proceed.</span>
+                            </div>
+
+                            <!-- FORM -->
+                            <form id="wizard-form" onsubmit="handleFinalSubmit(event)">
+                                <div id="questions-container">
+                                    <!-- Dynamic content -->
+                                </div>
+
+                                <!-- BUTTONS -->
+                                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary border-opacity-25">
+                                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" id="btn-prev" onclick="prevQuestion()" style="display: none;">
+                                        <i class="bi bi-arrow-left me-1"></i> Back
+                                    </button>
+                                    <button type="button" class="btn btn-enjoy ms-auto" id="btn-next" onclick="nextQuestion()">
+                                        Next <i class="bi bi-arrow-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- SUCCESS SCREEN -->
+                        <div id="survey-success" style="display: none;" class="text-center py-4">
+                            <div class="success-icon-wrapper">
+                                <div class="success-glow"></div>
+                                <i class="bi bi-check-circle-fill text-brand-enjoy display-1 position-relative z-1"></i>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold small">
+                                    <i class="bi bi-shield-check me-1"></i> Response Saved Successfully
+                                </span>
+                            </div>
+
+                            <h3 class="h2 text-white fw-bold mb-2">Thank you!</h3>
+                            <p class="text-white-50 fs-6 mb-4 mx-auto" style="max-width: 500px;">
+                                Your responses have been saved. They will be invaluable in shaping the future of <strong class="text-white">EnjoyTheLab</strong>.
+                            </p>
+
+                            <!-- HIGHLIGHT CARD -->
+                            <div class="card-launch-notify text-start mb-4 mx-auto" style="max-width: 520px;">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="fs-2 text-brand-enjoy leading-none"><i class="bi bi-rocket-takeoff-fill"></i></div>
+                                    <div>
+                                        <h5 class="h6 text-white fw-bold mb-1">Priority Early Access</h5>
+                                        <p class="small text-muted mb-0">We will notify you as soon as early access and beta testing become available for your laboratory.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="javascript:location.reload()" class="btn btn-outline-light rounded-pill px-4">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Take Again
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JS LOGIC -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3_W7sS6Ox4TkO9uyXPJF9evNPkpJ0NdMGfyBGQ3hWtbSHXULSBK5AIu6lS1ij05iw/exec';
+
+        let globalUniversities = [];
+
+        // The loading screen is shown only while the university list is being
+        // fetched; it disappears as soon as the data is ready (or on failure),
+        // with a hard 8s cap so it can never get stuck.
+        function hideLoadingScreen() {
+            const screen = document.getElementById('splash-screen');
+            if (screen && !screen.classList.contains('hidden')) {
+                screen.classList.add('hidden');
+            }
+        }
+
+        const universitiesReady = loadUniversitiesData();
+        universitiesReady.finally(hideLoadingScreen);
+        setTimeout(hideLoadingScreen, 8000);
+
+        // RESEARCHERS / USERS QUESTIONS
+        const researcherQuestions = [
+            {
+                id: "What is your current academic or professional position?",
+                img: "16.gif",
+                title: "What is your current academic or professional position?",
+                type: "single",
+                options: [
+                    "Bachelor / Master Student",
+                    "PhD Student",
+                    "Post-doc / Research Fellow",
+                    "Research Scientist",
+                    "Lab Technician",
+                    "Other"
+                ]
+            },
+            {
+                id: "What types of experimental data do you work with most often?",
+                img: "17.gif",
+                title: "What types of experimental data do you work with most often?",
+                type: "multi",
+                options: [
+                    "CRISPR Screening",
+                    "RNA-seq / DNA-seq / Single Cell",
+                    "Flow Cytometry",
+                    "Microscopy / Image Analysis",
+                    "Proteomics / Metabolomics",
+                    "qPCR / RT-qPCR",
+                    "Other"
+                ]
+            },
+            {
+                id: "How often do you analyze experimental data?",
+                img: "18.gif",
+                title: "How often do you analyze experimental data?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Less frequently" },
+                    { value: 2, label: "A few times a month" },
+                    { value: 3, label: "About once a week" },
+                    { value: 4, label: "Several times a week" },
+                    { value: 5, label: "Every day" }
+                ]
+            },
+            {
+                id: "Which tools do you currently use to analyze your experimental data?",
+                img: "19.gif",
+                title: "Which tools do you currently use to analyze your experimental data?",
+                type: "multi",
+                options: [
+                    "Excel / Google Sheets",
+                    "GraphPad Prism",
+                    "R / Python / Other programming languages",
+                    "Instrument-specific software",
+                    "ImageJ / Fiji",
+                    "Bioinformatics-specific software",
+                    "I ask a bioinformatician or colleague",
+                    "Other"
+                ]
+            },
+            {
+                id: "How do you usually go from raw experimental data to your final results?",
+                img: "20.gif",
+                title: "How do you usually go from raw experimental data to your final results?",
+                type: "single",
+                options: [
+                    "I perform the entire analysis myself",
+                    "I use established analysis pipelines",
+                    "I combine several different software tools",
+                    "I use scripts or code developed by myself or colleagues",
+                    "I ask a colleague or bioinformatician for help",
+                ]
+            },
+            {
+                id: "Which part of your current data analysis workflow takes the most time?",
+                img: "21.gif",
+                title: "Which part of your current data analysis workflow takes the most time?",
+                type: "single",
+                options: [
+                    "Organizing and cleaning data",
+                    "Preparing data for analysis",
+                    "Running the analysis",
+                    "Troubleshooting errors",
+                    "Interpreting the results",
+                    "Creating figures",
+                    "Checking and repeating analyses",
+                    "Other"
+                ]
+            },
+            {
+                id: "How often do you have to repeat manual steps when analyzing your data?",
+                img: "22.gif",
+                title: "How often do you have to repeat manual steps when analyzing your data?",
+                type: "scale",
+                options: [
+                { value: 1, label: "Never" },
+                    { value: 2, label: "Rarely" },
+                    { value: 3, label: "Sometimes" },
+                    { value: 4, label: "Often" },
+                    { value: 5, label: "Very often" }
+                   
+                ]
+            },
+            {
+                id: "How often do you need help from another person to complete a data analysis?",
+                img: "23.gif",
+                title: "How often do you need help from another person to complete a data analysis?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Never" },
+                    { value: 2, label: "Rarely" },
+                    { value: 3, label: "Sometimes" },
+                    { value: 4, label: "Frequently" },
+                    { value: 5, label: "Almost every day" }
+                ]
+            },
+            {
+                id: "How confident are you that your current data analysis methods are completely reproducible?",
+                img: "24.gif",
+                title: "How confident are you that your current data analysis methods are completely reproducible?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Not confident at all" },
+                    { value: 2, label: "Not very confident" },
+                    { value: 3, label: "Somewhat confident" },
+                    { value: 4, label: "Confident" },
+                    { value: 5, label: "Very confident" }
+                ]
+            },
+            {
+                id: "What are the most common problems you encounter when analyzing your data?",
+                img: "25.gif",
+                title: "What are the most common problems you encounter when analyzing your data?",
+                type: "multi",
+                options: [
+                    "Software is difficult to use",
+                    "I have to perform too many manual steps",
+                    "I have difficulty choosing the correct analysis",
+                    "Code or scripts do not work as expected",
+                    "Different tools are difficult to combine",
+                    "Results are difficult to reproduce",
+                    "Files or parameters are difficult to keep track of",
+                    "I do not experience major problems"
+                ]
+            },
+            {
+                id: "If you could eliminate one difficulty from your current data analysis workflow, which would you choose?",
+                img: "26.gif",
+                title: "If you could eliminate one difficulty from your current data analysis workflow, which would you choose?",
+                type: "single",
+                options: [
+                    "Reduce manual and repetitive work",
+                    "Avoid writing code",
+                    "Reduce the time needed to obtain results",
+                    "Avoid waiting for bioinformatics support",
+                    "Improve reproducibility",
+                    "Better organize data and results",
+                    "Create publication-ready figures more easily",
+                    "Other"
+                ]
+            },
+            {
+                id: "What would you most like to be able to do more easily in your research?",
+                img: "27.gif",
+                title: "What would you most like to be able to do more easily in your research?",
+                type: "single",
+                options: [
+                    "Analyze my data independently",
+                    "Move from raw data to results faster",
+                    "Explore more analyses without needing technical help",
+                    "Keep better track of my analyses",
+                    "Reproduce previous analyses more easily",
+                    "Spend less time on repetitive tasks",
+                    "Focus more time on biological interpretation",
+                    "Other"
+                ]
+            },
+            {
+                id: "What usually happens when you encounter a problem during data analysis?",
+                img: "28.gif",
+                title: "What usually happens when you encounter a problem during data analysis?",
+                type: "single",
+                options: [
+                    "I solve it myself",
+                    "I search online for a solution",
+                    "I ask a colleague",
+                    "I contact a bioinformatician",
+                    "I postpone the analysis",
+                    "I change the analysis approach",
+                    "Other"
+                ]
+            },
+            {
+                id: "Which part of your current workflow works particularly well for you?",
+                img: "29.gif",
+                title: "Which part of your current workflow works particularly well for you?",
+                type: "single",
+                options: [
+                    "Data organization",
+                    "Data analysis",
+                    "Data visualization",
+                    "Collaboration with colleagues",
+                    "Reproducibility and documentation",
+                    "Existing software tools",
+                    "I am generally satisfied with my workflow",
+                    "Other"
+                ]
+            },
+            {
+                id: "What would a new data analysis platform need to offer for you to use it instead of your current tools?",
+                img: "30.gif",
+                title: "What would a new data analysis platform need to offer for you to use it instead of your current tools?",
+                type: "multi",
+                options: [
+                    "Significant time savings",
+                    "No coding required",
+                    "Reliable and validated analyses",
+                    "Improved reproducibility",
+                    "Publication-ready figures",
+                    "Automatic tracking of analysis parameters",
+                    "Ease of use",
+                    "Other"
+                ]
+            },
+            {
+                id: "Do you have any comments or suggestions on data analysis in research?",
+                img: "15-3.gif",
+                title: "Do you have any comments or suggestions on data analysis in research? (Optional)",
+                type: "open_final"
+            },
+            {
+                id: "NAMES_Universities",
+                img: "thanks.gif",
+                title: "Where are you conducting your research?",
+                type: "contact_step"
+            }
+        ];
+
+
+        // PRINCIPAL INVESTIGATORS QUESTIONS
+        const piQuestions = [
+            {
+                id: "How many people work in your lab?",
+                img: "1.gif",
+                title: "How many people work in your lab?",
+                type: "single",
+                options: [
+                    "1–5",
+                    "6–10",
+                    "11–20",
+                    "21–30",
+                    "More than 30"
+                ]
+            },
+            {
+                id: "What types of experimental data are most frequently generated in your lab?",
+                img: "2.gif",
+                title: "What types of experimental data are most frequently generated in your lab?",
+                type: "multi",
+                options: [
+                    "CRISPR Screening",
+                    "RNA-seq / DNA-seq / Single Cell",
+                    "Flow Cytometry",
+                    "Microscopy / Imaging",
+                    "Proteomics / Metabolomics",
+                    "qPCR / RT-qPCR",
+                    "Other"
+                ]
+            },
+            {
+                id: "Who is primarily responsible for analyzing experimental data in your lab?",
+                img: "3.gif",
+                title: "Who is primarily responsible for analyzing experimental data in your lab?",
+                type: "single",
+                options: [
+                    "Individual researchers",
+                    "Post-docs / senior researchers",
+                    "An internal bioinformatician",
+                    "A shared bioinformatics core",
+                    "External collaborators",
+                    "A combination of these"
+                ]
+            },
+            {
+                id: "How often do researchers in your lab need help from a bioinformatician or another data analysis expert?",
+                img: "4.gif",
+                title: "How often do researchers in your lab need help from a bioinformatician or another data analysis expert?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Never" },
+                    { value: 2, label: "Rarely" },
+                    { value: 3, label: "A few times per month" },
+                    { value: 4, label: "Every week" },
+                    { value: 5, label: "Almost every day" }
+                ]
+            },
+            {
+                id: "When a researcher leaves your lab, how easy is it for colleagues to access and reuse their previous analyses?",
+                img: "5.gif",
+                title: "When a researcher leaves your lab, how easy is it for colleagues to access and reuse their previous analyses?",
+                type: "single",
+                options: [
+                    "Very easy and well organized",
+                    "Quite easy, with some searching",
+                    "It requires significant time and effort",
+                    "It is difficult because files or parameters are often missing",
+                    "It is often impossible to fully reconstruct the analysis"
+                ]
+            },
+            {
+                id: "What usually causes delays in the analysis of experimental data in your lab?",
+                img: "6.gif",
+                title: "What usually causes delays in the analysis of experimental data in your lab?",
+                type: "multi",
+                options: [
+                    "Limited bioinformatics expertise",
+                    "Limited researcher time",
+                    "Waiting for bioinformatics support",
+                    "Complexity of the software",
+                    "Manual or repetitive analysis steps",
+                    "Data organization",
+                    "Difficulty interpreting results",
+                    "Other",
+                    "There is no significant limitation"
+                ]
+            },
+            {
+                id: "Approximately how much time does your lab spend each week on manual or repetitive data analysis tasks?",
+                img: "7.gif",
+                title: "Approximately how much time does your lab spend each week on manual or repetitive data analysis tasks?",
+                type: "single",
+                options: [
+                    "Less than 2 hours",
+                    "2–5 hours",
+                    "5–10 hours",
+                    "10–20 hours",
+                    "More than 20 hours",
+                    "I do not know"
+                ]
+            },
+            {
+                id: "How easy is it for you to understand how an analysis was performed by a member of your lab?",
+                img: "8.gif",
+                title: "How easy is it for you to understand how an analysis was performed by a member of your lab?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Very difficult" },
+                    { value: 2, label: "Often difficult" },
+                    { value: 3, label: "It depends on the researcher" },
+                    { value: 4, label: "Usually easy" },
+                    { value: 5, label: "Very easy" }
+                ]
+            },
+            {
+                id: "How easy is it to reproduce an analysis performed by a researcher who is no longer available?",
+                img: "9.gif",
+                title: "How easy is it to reproduce an analysis performed by a researcher who is no longer available?",
+                type: "scale",
+                options: [
+                    { value: 1, label: "Often impossible" },
+                    { value: 2, label: "Difficult" },
+                    { value: 3, label: "Requires some work" },
+                    { value: 4, label: "Quite easy" },
+                    { value: 5, label: "Very easy" }
+                ]
+            },
+            {
+                id: "Which aspects of data analysis are most difficult to manage across your lab?",
+                img: "10.gif",
+                title: "Which aspects of data analysis are most difficult to manage across your lab?",
+                type: "multi",
+                options: [
+                    "Keeping analyses consistent between researchers",
+                    "Documenting analysis steps",
+                    "Keeping track of files and parameters",
+                    "Reproducing previous analyses",
+                    "Training researchers on different tools",
+                    "Access to bioinformatics expertise",
+                    "Reviewing the correctness of analyses",
+                    "None of these"
+                ]
+            },
+            {
+                id: "What do you consider most important when reviewing data generated by your researchers?",
+                img: "11.gif",
+                title: "What do you consider most important when reviewing data generated by your researchers?",
+                type: "single",
+                options: [
+                    "Correctness of the analysis",
+                    "Reproducibility",
+                    "Clear documentation",
+                    "Reliable statistical methods",
+                    "Clear visualization of results",
+                    "Ability to trace how results were obtained",
+                    "Speed of analysis",
+                    "Other"
+                ]
+            },
+            {
+                id: "Which parts of your lab's current data analysis workflow work well?",
+                img: "12.gif",
+                title: "Which parts of your lab's current data analysis workflow work well?",
+                type: "multi",
+                options: [
+                    "Researchers can work independently",
+                    "Existing software is effective",
+                    "Data are well organized",
+                    "Analyses are well documented",
+                    "Researchers collaborate effectively",
+                    "Bioinformatics support works well",
+                    "The overall workflow is efficient",
+                    "Other"
+                ]
+            },
+            {
+                id: "Which aspects of your lab's current data analysis workflow create the most frustration?",
+                img: "13.gif",
+                title: "Which aspects of your lab's current data analysis workflow create the most frustration?",
+                type: "multi",
+                options: [
+                    "Waiting for analysis support",
+                    "Too much manual work",
+                    "Different researchers use different methods",
+                    "Difficulty reproducing analyses",
+                    "Poor organization of files or results",
+                    "Difficulty checking analyses",
+                    "Limited technical expertise",
+                    "Other"
+                ]
+            },
+            {
+                id: "Which software or online services does your lab currently pay for?",
+                img: "14.gif",
+                title: "Which software or online services does your lab currently pay for?",
+                type: "multi",
+                options: [
+                    "GraphPad Prism",
+                    "Benchling",
+                    "FlowJo",
+                    "ImageJ / Fiji or similar image analysis software",
+                    "Adobe Creative Cloud or similar figure/design software",
+                    "Cloud storage (Google Drive, Dropbox, OneDrive, etc.)",
+                    "Bioinformatics / data analysis platforms",
+                    "Other laboratory-specific software",
+                    "None — we mainly use free or open-source tools",
+                    "I am not sure"
+                ]
+            },
+            {
+                id: "If you could improve one aspect of data analysis in your lab, what would have the greatest impact?",
+                img: "15.gif",
+                title: "If you could improve one aspect of data analysis in your lab, what would have the greatest impact?",
+                type: "single",
+                options: [
+                    "Reduce the time required for analysis",
+                    "Increase researchers' independence",
+                    "Improve reproducibility",
+                    "Standardize analysis workflows",
+                    "Reduce errors",
+                    "Improve data organization",
+                    "Make results easier to review",
+                    "Improve access to bioinformatics expertise",
+                    "Other"
+                ]
+            },
+            {
+                id: "What annual investment would you consider reasonable for a platform that significantly reduces the time required to analyze your lab's data?",
+                img: "15-1.gif",
+                title: "What annual investment would you consider reasonable for a platform that significantly reduces the time required to analyze your lab's data?",
+                type: "single",
+                options: [
+                    "Less than €500 / year",
+                    "€500–1,500 / year",
+                    "€1,500–3,000 / year",
+                    "€3,000–5,000 / year",
+                    "More than €5,000 / year",
+                    "I would not be willing to pay"
+                ]
+            },
+            {
+                id: "pi_17",
+                img: "15-3.gif",
+                title: "Do you have any comments or suggestions on data analysis in research? (Optional)",
+                type: "open_final"
+            },
+            {
+                id: "NAMES_Universities",
+                img: "thanks.gif",
+                title: "Where are you conducting your research?",
+                type: "contact_step"
+            }
+        ];
+
+        let activeQuestions = [];
+        let currentQIndex = 0;
+        let selectedRole = '';
+
+        function startSurvey(role) {
+            selectedRole = role;
+            document.getElementById('step-role-selection').style.display = 'none';
+            document.getElementById('survey-wizard').style.display = 'block';
+
+            activeQuestions = (role === 'pi') ? piQuestions : researcherQuestions;
+            currentQIndex = 0;
+            renderQuestions();
+            updateProgress();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            activeQuestions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = `q-step ${idx === 0 ? 'active' : ''}`;
+                qDiv.id = `step-${idx}`;
+
+                let contentHtml = '';
+
+                if (q.img) {
+                    contentHtml += `
+                        <div class="q-img-box">
+                            <img src="${q.img}" alt="Illustration" onerror="this.parentElement.style.display='none';">
+                        </div>`;
+                }
+
+                const multiSubtitle = q.type === 'multi' 
+                    ? ` <span class="badge bg-secondary-subtle text-white-50 border border-secondary border-opacity-25 ms-2 font-monospace fw-normal" style="font-size: 0.75rem;">(Multiple-choice question)</span>` 
+                    : '';
+
+                contentHtml += `<h4 class="h5 text-white fw-bold mb-3">${idx + 1}. ${q.title}${multiSubtitle}</h4>`;
+
+                // MULTI CHOICE
+                if (q.type === 'multi') {
+                    q.options.forEach((opt) => {
+                        const optVal = typeof opt === 'object' ? opt.label : opt;
+                        const optLower = optVal.trim().toLowerCase();
+                        const isOther = optLower === 'other' || optLower.startsWith('other ');
+                        
+                        contentHtml += `
+                            <div class="option-wrapper">
+                                <label class="survey-option-check" onclick="toggleOption(this, '${q.id}', ${isOther})">
+                                    <input type="checkbox" name="${q.id}" value="${optVal}">
+                                    <span>${optVal}</span>
+                                </label>
+                                ${isOther ? `
+                                    <div class="other-input-container" id="other-box-${q.id}">
+                                        <input type="text" class="form-control form-control-enjoy" name="${q.id}_other_specify" placeholder="Please specify...">
+                                    </div>
+                                ` : ''}
+                            </div>`;
+                    });
+                }
+                // SINGLE CHOICE
+                else if (q.type === 'single') {
+                    q.options.forEach((opt) => {
+                        const optVal = typeof opt === 'object' ? opt.label : opt;
+                        const optLower = optVal.trim().toLowerCase();
+                        const isOther = optLower === 'other' || optLower.startsWith('other ');
+
+                        contentHtml += `
+                            <div class="option-wrapper">
+                                <label class="survey-option-check" onclick="selectSingleOption(this, '${q.id}', ${isOther})">
+                                    <input type="radio" name="${q.id}" value="${optVal}">
+                                    <span>${optVal}</span>
+                                </label>
+                                ${isOther ? `
+                                    <div class="other-input-container" id="other-box-${q.id}">
+                                        <input type="text" class="form-control form-control-enjoy" name="${q.id}_other_specify" placeholder="Please specify...">
+                                    </div>
+                                ` : ''}
+                            </div>`;
+                    });
+                }
+                // SCALE 1-5
+                else if (q.type === 'scale') {
+                    contentHtml += `<div class="scale-container">`;
+                    q.options.forEach((opt) => {
+                        contentHtml += `
+                            <div class="scale-item" onclick="selectScaleOption(this, '${q.id}')">
+                                <input type="radio" name="${q.id}" value="${opt.value}" class="d-none">
+                                <div class="scale-box">${opt.value}</div>
+                                <div class="scale-label">${opt.label}</div>
+                            </div>`;
+                    });
+                    contentHtml += `</div>`;
+                }
+                // OPEN FINAL
+                else if (q.type === 'open_final') {
+                    contentHtml += `
+                        <div class="mb-3">
+                            <textarea class="form-control form-control-enjoy" name="${q.id}_comment" rows="5" placeholder="Share your thoughts or comments here (optional)..."></textarea>
+                        </div>`;
+                }
+                // CONTACT STEP WITH CUSTOM AUTOCOMPLETE
+                else if (q.type === 'contact_step') {
+                    contentHtml += `
+                        <div class="mb-2">
+                            <div class="card-launch-notify mb-4">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="fs-2 text-brand-enjoy leading-none"><i class="bi bi-rocket-takeoff-fill"></i></div>
+                                    <div>
+                                        <h5 class="h6 text-white fw-bold mb-1">Be Part of the Research Revolution</h5>
+                                        <p class="small text-white-50 mb-0">Provide your email below to be contacted as soon as <strong class="text-white">EnjoyTheLab</strong> — the new and finally revolutionary way to do research — goes online, so you can be among the first to try it out!</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 position-relative">
+                                    <label class="form-label text-white small fw-semibold">University / Research Institution / Workplace *</label>
+                                    <input type="text" class="form-control form-control-enjoy" id="user_institution" name="user_institution" placeholder="Type to search or enter your institution name..." autocomplete="off" required oninput="handleUniSearch(this)" onfocus="handleUniSearch(this)">
+                                    <div id="uni-dropdown" class="uni-dropdown-menu" style="display: none;"></div>
+                                    <div class="form-text text-white-50 small mt-1">
+                                        <i class="bi bi-info-circle me-1"></i>If your institution is not in the list, simply type its full name directly in the box.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-white small fw-semibold">Full Name <span class="text-muted fw-normal">(Optional)</span></label>
+                                    <input type="text" class="form-control form-control-enjoy" name="user_name" placeholder="John Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-white small fw-semibold">Institutional Email <span class="text-muted fw-normal">(Optional)</span></label>
+                                    <input type="email" class="form-control form-control-enjoy" name="user_email" placeholder="name@university.edu">
+                                </div>
+                            </div>
+
+                            <div class="card-privacy-notice">
+                                <div class="d-flex align-items-center gap-3">
+                                    <i class="bi bi-shield-check text-brand-enjoy fs-3"></i>
+                                    <div class="small text-muted">
+                                        <strong class="text-white d-block">100% Anonymous Data Analysis</strong>
+                                        Your survey responses are analyzed anonymously. Institutional information is used strictly to group insights by research center.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                }
+
+                qDiv.innerHTML = contentHtml;
+                container.appendChild(qDiv);
+            });
+        }
+
+        // TOGGLE MULTI OPTION
+        function toggleOption(element, qId, isOther) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            setTimeout(() => {
+                if (checkbox.checked) {
+                    element.classList.add('selected');
+                } else {
+                    element.classList.remove('selected');
+                }
+
+                if (isOther) {
+                    const otherBox = document.getElementById(`other-box-${qId}`);
+                    if (otherBox) {
+                        otherBox.style.display = checkbox.checked ? 'block' : 'none';
+                        if (checkbox.checked) {
+                            const input = otherBox.querySelector('input');
+                            if (input) input.focus();
+                        }
+                    }
+                }
+                hideValidationError();
+            }, 10);
+        }
+
+        // SELECT SINGLE OPTION
+        function selectSingleOption(element, qId, isOther) {
+            const stepEl = element.closest('.q-step');
+            
+            stepEl.querySelectorAll(`input[name="${qId}"]`).forEach(radio => {
+                radio.checked = false;
+                const wrapper = radio.closest('.survey-option-check');
+                if (wrapper) wrapper.classList.remove('selected');
+            });
+
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            element.classList.add('selected');
+
+            const otherBox = document.getElementById(`other-box-${qId}`);
+            if (otherBox) {
+                if (isOther) {
+                    otherBox.style.display = 'block';
+                    const input = otherBox.querySelector('input');
+                    if (input) input.focus();
+                } else {
+                    otherBox.style.display = 'none';
+                }
+            }
+            hideValidationError();
+        }
+
+        // SELECT SCALE OPTION
+        function selectScaleOption(element, qId) {
+            const container = element.closest('.scale-container');
+            container.querySelectorAll('.scale-item').forEach(item => {
+                item.classList.remove('selected');
+                const radio = item.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
+            });
+
+            element.classList.add('selected');
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+
+            hideValidationError();
+        }
+
+        function updateProgress() {
+            const total = activeQuestions.length;
+            const current = currentQIndex + 1;
+            const percent = Math.round((current / total) * 100);
+
+            document.getElementById('q-counter').innerText = `Question ${current} of ${total}`;
+            document.getElementById('q-percent').innerText = `${percent}%`;
+
+            document.getElementById('progress-fill').style.width = `${percent}%`;
+            document.getElementById('progress-runner').style.left = `${percent}%`;
+
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            btnPrev.style.display = (currentQIndex === 0) ? 'none' : 'inline-block';
+
+            if (currentQIndex === total - 1) {
+                btnNext.innerHTML = 'Submit Responses <i class="bi bi-send ms-1"></i>';
+            } else {
+                btnNext.innerHTML = 'Next <i class="bi bi-arrow-right ms-1"></i>';
+            }
+        }
+
+        function showQuestion(index) {
+            const steps = document.querySelectorAll('.q-step');
+            steps.forEach((step, idx) => {
+                if (idx === index) step.classList.add('active');
+                else step.classList.remove('active');
+            });
+            hideValidationError();
+        }
+
+        // VALIDATION LOGIC
+        function validateCurrentStep() {
+            const q = activeQuestions[currentQIndex];
+            const currentStepEl = document.getElementById(`step-${currentQIndex}`);
+
+            if (q.type === 'multi') {
+                const checkedOptions = currentStepEl.querySelectorAll(`input[name="${q.id}"]:checked`);
+                if (checkedOptions.length === 0) {
+                    showValidationError('Please select at least one option to proceed.');
+                    return false;
+                }
+
+                for (let opt of checkedOptions) {
+                    const optLower = opt.value.trim().toLowerCase();
+                    if (optLower === 'other' || optLower.startsWith('other ')) {
+                        const otherInput = currentStepEl.querySelector(`input[name="${q.id}_other_specify"]`);
+                        if (otherInput && !otherInput.value.trim()) {
+                            otherInput.focus();
+                            showValidationError('Please specify your "Other" option in the text field.');
+                            return false;
+                        }
+                    }
+                }
+            } 
+            else if (q.type === 'single') {
+                const checkedOption = currentStepEl.querySelector(`input[name="${q.id}"]:checked`);
+                if (!checkedOption) {
+                    showValidationError('Please select an option to proceed.');
+                    return false;
+                }
+
+                const optLower = checkedOption.value.trim().toLowerCase();
+                if (optLower === 'other' || optLower.startsWith('other ')) {
+                    const otherInput = currentStepEl.querySelector(`input[name="${q.id}_other_specify"]`);
+                    if (otherInput && !otherInput.value.trim()) {
+                        otherInput.focus();
+                        showValidationError('Please specify your "Other" option in the text field.');
+                        return false;
+                    }
+                }
+            }
+            else if (q.type === 'scale') {
+                const checkedOption = currentStepEl.querySelector(`input[name="${q.id}"]:checked`);
+                if (!checkedOption) {
+                    showValidationError('Please select a score from 1 to 5 to proceed.');
+                    return false;
+                }
+            }
+            else if (q.type === 'contact_step') {
+                const instInput = currentStepEl.querySelector('input[name="user_institution"]');
+                if (instInput && !instInput.value.trim()) {
+                    instInput.focus();
+                    instInput.reportValidity();
+                    showValidationError('Please enter your University, Institution or Workplace.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function showValidationError(msg) {
+            const warningEl = document.getElementById('validation-warning');
+            const warningMsg = document.getElementById('validation-warning-msg');
+            if (warningEl && warningMsg) {
+                warningMsg.innerText = msg;
+                warningEl.classList.remove('d-none');
+                warningEl.classList.add('d-flex');
+            }
+        }
+
+        function hideValidationError() {
+            const warningEl = document.getElementById('validation-warning');
+            if (warningEl) {
+                warningEl.classList.add('d-none');
+                warningEl.classList.remove('d-flex');
+            }
+        }
+
+        function nextQuestion() {
+            if (!validateCurrentStep()) return;
+
+            if (currentQIndex < activeQuestions.length - 1) {
+                currentQIndex++;
+                showQuestion(currentQIndex);
+                updateProgress();
+            } else {
+                document.getElementById('wizard-form').requestSubmit();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQIndex > 0) {
+                currentQIndex--;
+                showQuestion(currentQIndex);
+                updateProgress();
+            }
+        }
+
+        async function handleFinalSubmit(event) {
+    event.preventDefault();
+
+    if (!validateCurrentStep()) return;
+
+    const btnNext = document.getElementById('btn-next');
+    btnNext.disabled = true;
+    btnNext.innerHTML = 'Submitting... <span class="spinner-border spinner-border-sm ms-2"></span>';
+
+    const form = document.getElementById('wizard-form');
+    const formData = new FormData(form);
+    
+    const payload = {
+        Timestamp: new Date().toLocaleString('it-IT'),
+        Role: selectedRole === 'pi' ? 'Principal Investigator' : 'Researcher'
+    };
+
+    for (const [key, value] of formData.entries()) {
+        if (value.trim() !== "") {
+            // Salta i campi di specifica separati, verranno uniti al campo principale
+            if (key.endsWith('_other_specify')) continue;
+
+            let finalVal = value;
+            
+            // Se l'opzione selezionata è "Other", recupera il testo digitato nell'input di testo
+            const otherSpecifyVal = formData.get(`${key}_other_specify`);
+            if (value.trim().toLowerCase().startsWith('other') && otherSpecifyVal && otherSpecifyVal.trim() !== "") {
+                finalVal = `Other: ${otherSpecifyVal.trim()}`;
+            }
+
+            if (payload[key]) {
+                payload[key] += ' | ' + finalVal;
+            } else {
+                payload[key] = finalVal;
+            }
+        }
+    }
+
+    try {
+        if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes('script.google.com')) {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
+        }
+
+        document.getElementById('survey-wizard').style.display = 'none';
+        document.getElementById('survey-success').style.display = 'block';
+    } catch (error) {
+        console.error('Submission error:', error);
+        alert('An error occurred during submission. Please try again.');
+        btnNext.disabled = false;
+        btnNext.innerHTML = 'Submit Responses <i class="bi bi-send ms-1"></i>';
+    }
+}
+
+        // SCARICAMENTO E GESTIONE DATI UNIVERSITÀ CON AUTOCOMPLETE PERSONALIZZATO
+        async function loadUniversitiesData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json');
+                const data = await response.json();
+                globalUniversities = [...new Set(data.map(u => u.name))];
+            } catch (e) {
+                console.warn('Impossibile caricare la lista università:', e);
+            }
+        }
+
+        function handleUniSearch(input) {
+            const query = input.value.trim().toLowerCase();
+            const dropdown = document.getElementById('uni-dropdown');
+            if (!dropdown) return;
+
+            dropdown.innerHTML = '';
+
+            // Opzione esplicita "Other / Not listed"
+            const otherDiv = document.createElement('div');
+            otherDiv.className = 'uni-dropdown-item other-item';
+            otherDiv.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Other / Not listed (keep typing)';
+            otherDiv.onclick = () => selectUniOption('Other / Not listed');
+            dropdown.appendChild(otherDiv);
+
+            let matches = [];
+            if (query.length > 0) {
+                matches = globalUniversities.filter(u => u.toLowerCase().includes(query)).slice(0, 20);
+            } else {
+                matches = globalUniversities.slice(0, 15);
+            }
+
+            matches.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'uni-dropdown-item';
+                div.textContent = name;
+                div.onclick = () => selectUniOption(name);
+                dropdown.appendChild(div);
+            });
+
+            dropdown.style.display = 'block';
+        }
+
+        function selectUniOption(val) {
+            const input = document.getElementById('user_institution');
+            const dropdown = document.getElementById('uni-dropdown');
+            if (input) {
+                input.value = val;
+            }
+            if (dropdown) {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        // Chiude la tendina se si clicca fuori dall'input
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('uni-dropdown');
+            const input = document.getElementById('user_institution');
+            if (dropdown && input && !dropdown.contains(e.target) && e.target !== input) {
+                dropdown.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

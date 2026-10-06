@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="it" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnjoyTheLab — Survey Analytics</title>
+
+    <!-- Google Fonts, Bootstrap, Icons & Chart.js -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0d0b28 0%, #170f48 50%, #0d0b28 100%);
+            --card-bg: rgba(20, 17, 58, 0.85);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --brand-enjoy: #5cc9ca;
+            --brand-thelab: #abe6ff;
+        }
+
+        body {
+            background: var(--bg-gradient) !important;
+            background-attachment: fixed !important;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(16px);
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-pills .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+        }
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--brand-enjoy), #3caaa9);
+            color: #0b0921;
+        }
+
+        .filter-select {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--card-border);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-weight: 600;
+        }
+        .filter-select:focus {
+            background-color: rgba(20, 17, 58, 0.95);
+            color: #ffffff;
+            border-color: var(--brand-enjoy);
+            box-shadow: 0 0 0 0.25rem rgba(92, 201, 202, 0.25);
+        }
+
+        .chart-container {
+            position: relative;
+            max-height: 380px;
+            width: 100%;
+        }
+
+        .brand-text .enjoy { color: #ffffff; font-weight: 700; }
+        .brand-text .thelab {
+            background: linear-gradient(135deg, var(--brand-thelab), var(--brand-enjoy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body class="py-4">
+
+    <div class="container my-3">
+        <!-- HEADER -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h1 class="h3 brand-text mb-1">
+                    <span class="enjoy">Enjoy</span><span class="thelab">TheLab</span> Analytics
+                </h1>
+                <p class="text-white-50 mb-0 small">Dashboard risposte in tempo reale da Google Sheets</p>
+            </div>
+            <button class="btn btn-outline-light rounded-pill px-3 py-2 small" onclick="fetchData()">
+                <i class="bi bi-arrow-clockwise me-1"></i> Aggiorna Dati
+            </button>
+        </div>
+
+        <!-- STATS OVERVIEW -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center gap-3">
+                    <div class="fs-1 text-brand-enjoy"><i class="bi bi-people-fill"></i></div>
+                    <div>
+                        <div class="text-white-50 small fw-semibold">Totale Risposte Filtrate</div>
+                        <div class="fs-3 fw-bold" id="total-count">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center gap-3">
+                    <div class="fs-1 text-info"><i class="bi bi-journal-check"></i></div>
+                    <div>
+                        <div class="text-white-50 small fw-semibold">Researcher Responses</div>
+                        <div class="fs-3 fw-bold" id="researcher-count">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center gap-3">
+                    <div class="fs-1 text-warning"><i class="bi bi-person-badge-fill"></i></div>
+                    <div>
+                        <div class="text-white-50 small fw-semibold">PI Responses</div>
+                        <div class="fs-3 fw-bold" id="pi-count">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLS ROW: TABS + UNIVERSITY FILTER -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <ul class="nav nav-pills" id="roleTabs">
+                <li class="nav-item">
+                    <button class="nav-link active" onclick="switchRole('Researcher Survey Responses')">
+                        <i class="bi bi-journal-code me-1"></i> Researcher / Users
+                    </button>
+                </li>
+                <li class="nav-item ms-2">
+                    <button class="nav-link" onclick="switchRole('PI Survey Responses')">
+                        <i class="bi bi-person-workspace me-1"></i> Principal Investigators (PI)
+                    </button>
+                </li>
+            </ul>
+
+            <!-- DROPDOWN FILTRO UNIVERSITÀ -->
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-building text-white-50 fs-5"></i>
+                <select id="universityFilter" class="form-select filter-select" onchange="applyFilter()">
+                    <option value="">all the universities / Enti</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LOADING INDICATOR -->
+        <div id="loading" class="text-center py-5">
+            <div class="spinner-border text-info" role="status"></div>
+            <p class="text-white-50 mt-3 mb-0">Caricamento risposte in corso...</p>
+        </div>
+
+        <!-- CHARTS CONTAINER -->
+        <div id="charts-grid" class="row"></div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3_W7sS6Ox4TkO9uyXPJF9evNPkpJ0NdMGfyBGQ3hWtbSHXULSBK5AIu6lS1ij05iw/exec';
+
+        let rawData = {};
+        let activeSheet = 'Researcher Survey Responses';
+        let chartInstances = [];
+
+        const colorPalette = [
+            '#5cc9ca', '#abe6ff', '#ff6384', '#36a2eb', '#ffce56', 
+            '#4bc0c0', '#9966ff', '#ff9f40', '#8e44ad', '#2ecc71'
+        ];
+
+        // Individua la colonna che contiene l'Università / Ente
+        function getUniversityHeader(rows) {
+            if (!rows || rows.length === 0) return null;
+            const headers = Object.keys(rows[0]);
+            return headers.find(h => /universit|institution|istituz|ateneo|affiliation|affiliazione/i.test(h)) || null;
+        }
+
+        async function fetchData() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('charts-grid').innerHTML = '';
+            
+            chartInstances.forEach(c => c.destroy());
+            chartInstances = [];
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                rawData = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+                populateUniversityDropdown();
+                renderDashboard();
+            } catch (err) {
+                console.error("Errore recupero dati:", err);
+                document.getElementById('loading').innerHTML = `
+                    <div class="alert alert-danger">
+                        Impossibile caricare i dati. Verifica la configurazione di Google Apps Script.
+                    </div>`;
+            }
+        }
+
+        function populateUniversityDropdown() {
+            const select = document.getElementById('universityFilter');
+            const currentValue = select.value;
+            const universities = new Set();
+
+            Object.values(rawData).forEach(sheetRows => {
+                const uniKey = getUniversityHeader(sheetRows);
+                if (uniKey) {
+                    sheetRows.forEach(row => {
+                        const val = (row[uniKey] || '').toString().trim();
+                        if (val) universities.add(val);
+                    });
+                }
+            });
+
+            select.innerHTML = '<option value="">Tutte le Università / Enti</option>';
+            Array.from(universities).sort().forEach(uni => {
+                const opt = document.createElement('option');
+                opt.value = uni;
+                opt.textContent = uni;
+                select.appendChild(opt);
+            });
+
+            if (universities.has(currentValue)) {
+                select.value = currentValue;
+            }
+        }
+
+        function switchRole(sheetName) {
+            activeSheet = sheetName;
+            document.querySelectorAll('#roleTabs .nav-link').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderDashboard();
+        }
+
+        function applyFilter() {
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            const container = document.getElementById('charts-grid');
+            container.innerHTML = '';
+
+            chartInstances.forEach(c => c.destroy());
+            chartInstances = [];
+
+            const selectedUni = document.getElementById('universityFilter').value;
+
+            // Aggiorna contatori con filtro applicato
+            let totalFilteredCount = 0, resFilteredCount = 0, piFilteredCount = 0;
+
+            ['Researcher Survey Responses', 'PI Survey Responses'].forEach(sheetName => {
+                const rows = rawData[sheetName] || [];
+                const uniKey = getUniversityHeader(rows);
+
+                const count = selectedUni && uniKey
+                    ? rows.filter(r => (r[uniKey] || '').toString().trim() === selectedUni).length
+                    : rows.length;
+
+                if (sheetName.includes('Researcher')) resFilteredCount = count;
+                else piFilteredCount = count;
+                totalFilteredCount += count;
+            });
+
+            document.getElementById('total-count').innerText = totalFilteredCount;
+            document.getElementById('researcher-count').innerText = resFilteredCount;
+            document.getElementById('pi-count').innerText = piFilteredCount;
+
+            // Prepara i dati filtrati per la scheda attiva
+            const allRows = rawData[activeSheet] || [];
+            const uniKey = getUniversityHeader(allRows);
+
+            const rows = (selectedUni && uniKey)
+                ? allRows.filter(r => (r[uniKey] || '').toString().trim() === selectedUni)
+                : allRows;
+
+            if (rows.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-inbox text-white-50 display-4"></i>
+                        <p class="text-white-50 mt-3">Nessuna risposta disponibile per i filtri selezionati.</p>
+                    </div>`;
+                return;
+            }
+
+            const headers = Object.keys(rows[0]);
+
+            headers.forEach((header, index) => {
+                if (['Timestamp', 'Role'].includes(header)) return;
+
+                const counts = {};
+                let textResponses = [];
+
+                rows.forEach(row => {
+                    const val = (row[header] || '').toString().trim();
+                    if (!val) return;
+
+                    if (val.includes('|')) {
+                        val.split('|').forEach(part => {
+                            const cleanPart = part.trim();
+                            if (cleanPart) counts[cleanPart] = (counts[cleanPart] || 0) + 1;
+                        });
+                    } else if (header.includes('comment') || header.includes('institution') || header.includes('name') || header.includes('email') || header.includes('universit')) {
+                        textResponses.push(val);
+                    } else {
+                        counts[val] = (counts[val] || 0) + 1;
+                    }
+                });
+
+                // Gestione dei campi testo libero
+                if (textResponses.length > 0 && Object.keys(counts).length === 0) {
+                    const textCard = document.createElement('div');
+                    textCard.className = 'col-12';
+                    textCard.innerHTML = `
+                        <div class="chart-card">
+                            <h5 class="h6 fw-bold text-white mb-3">${header}</h5>
+                            <div class="list-group list-group-flush rounded-3 overflow-hidden">
+                                ${textResponses.map(t => `<div class="list-group-item bg-dark text-white border-secondary border-opacity-25 py-2">${t}</div>`).join('')}
+                            </div>
+                        </div>`;
+                    container.appendChild(textCard);
+                    return;
+                }
+
+                if (Object.keys(counts).length === 0) return;
+
+                // Render Grafico
+                const cardCol = document.createElement('div');
+                cardCol.className = 'col-lg-6';
+
+                const canvasId = `chart-${index}`;
+                cardCol.innerHTML = `
+                    <div class="chart-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="h6 fw-bold text-white mb-0" style="max-width: 80%;">${header}</h5>
+                            <span class="badge bg-secondary-subtle text-info rounded-pill small">${rows.length} risposte</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="${canvasId}"></canvas>
+                        </div>
+                    </div>`;
+
+                container.appendChild(cardCol);
+
+                const labels = Object.keys(counts);
+                const dataValues = Object.values(counts);
+                const isPie = labels.length <= 5;
+
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                const newChart = new Chart(ctx, {
+                    type: isPie ? 'pie' : 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: dataValues,
+                            backgroundColor: colorPalette.slice(0, labels.length),
+                            borderColor: 'rgba(20, 17, 58, 0.8)',
+                            borderWidth: 2,
+                            borderRadius: isPie ? 0 : 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: isPie ? 'x' : 'y',
+                        plugins: {
+                            legend: {
+                                display: isPie,
+                                position: 'bottom',
+                                labels: { color: '#e2e8f0', font: { size: 11 } }
+                            }
+                        },
+                        scales: isPie ? {} : {
+                            x: { ticks: { color: '#a0aec0', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            y: { ticks: { color: '#e2e8f0', font: { size: 11 } }, grid: { display: false } }
+                        }
+                    }
+                });
+
+                chartInstances.push(newChart);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchData);
+    </script>
+</body>
+</html>
