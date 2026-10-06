@@ -475,10 +475,12 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3_W7sS6Ox4TkO9uyXPJF9evNPkpJ0NdMGfyBGQ3hWtbSHXULSBK5AIu6lS1ij05iw/exec';
 
         let globalUniversities = [];
+        let universitiesPromise = null;
+        let universitiesSettled = false;
 
-        // The loading screen is shown only while the university list is being
-        // fetched; it disappears as soon as the data is ready (or on failure),
-        // with a hard 8s cap so it can never get stuck.
+        // Static loading cover: no animation, no artificial delay. It is
+        // removed as soon as the page has loaded (4s hard cap so a slow
+        // subresource can never hold it on screen).
         function hideLoadingScreen() {
             const screen = document.getElementById('splash-screen');
             if (screen && !screen.classList.contains('hidden')) {
@@ -486,9 +488,24 @@
             }
         }
 
-        const universitiesReady = loadUniversitiesData();
-        universitiesReady.finally(hideLoadingScreen);
-        setTimeout(hideLoadingScreen, 8000);
+        if (document.readyState === 'complete') {
+            hideLoadingScreen();
+        } else {
+            window.addEventListener('load', hideLoadingScreen);
+        }
+        setTimeout(hideLoadingScreen, 4000);
+
+        // The university list (2.25 MB) is only needed by the final contact
+        // step, so it is fetched in the background from the first question
+        // onward instead of competing with the page at startup.
+        function ensureUniversitiesLoaded() {
+            if (!universitiesPromise) {
+                universitiesPromise = loadUniversitiesData().finally(() => {
+                    universitiesSettled = true;
+                });
+            }
+            return universitiesPromise;
+        }
 
         // RESEARCHERS / USERS QUESTIONS
         const researcherQuestions = [
@@ -996,6 +1013,8 @@
             currentQIndex = 0;
             renderQuestions();
             updateProgress();
+            loadQuestionImages(0);
+            ensureUniversitiesLoaded();
         }
 
         function renderQuestions() {
@@ -1012,7 +1031,7 @@
                 if (q.img) {
                     contentHtml += `
                         <div class="q-img-box">
-                            <img src="${q.img}" alt="Illustration" onerror="this.parentElement.style.display='none';">
+                            <img data-src="${q.img}" alt="Illustration" decoding="async" onerror="this.parentElement.style.display='none';">
                         </div>`;
                 }
 
@@ -1134,6 +1153,23 @@
             });
         }
 
+        // Only the visible question (and the next one) gets its illustration
+        // downloaded: the illustrations are ~44 MB in total and loading them
+        // all at once starves every other request, including the submit.
+        function loadQuestionImages(index) {
+            const loadAt = (i) => {
+                const step = document.getElementById(`step-${i}`);
+                if (!step) return;
+                const img = step.querySelector('img[data-src]');
+                if (img) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                }
+            };
+            loadAt(index);
+            loadAt(index + 1);
+        }
+
         // TOGGLE MULTI OPTION
         function toggleOption(element, qId, isOther) {
             const checkbox = element.querySelector('input[type="checkbox"]');
@@ -1230,6 +1266,7 @@
                 if (idx === index) step.classList.add('active');
                 else step.classList.remove('active');
             });
+            loadQuestionImages(index);
             hideValidationError();
         }
 
@@ -1332,14 +1369,10 @@
             }
         }
 
-        async function handleFinalSubmit(event) {
+        function handleFinalSubmit(event) {
     event.preventDefault();
 
     if (!validateCurrentStep()) return;
-
-    const btnNext = document.getElementById('btn-next');
-    btnNext.disabled = true;
-    btnNext.innerHTML = 'Submitting... <span class="spinner-border spinner-border-sm ms-2"></span>';
 
     const form = document.getElementById('wizard-form');
     const formData = new FormData(form);
@@ -1370,24 +1403,29 @@
         }
     }
 
-    try {
-        if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes('script.google.com')) {
-            await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
-            });
-        }
-
-        document.getElementById('survey-wizard').style.display = 'none';
-        document.getElementById('survey-success').style.display = 'block';
-    } catch (error) {
-        console.error('Submission error:', error);
-        alert('An error occurred during submission. Please try again.');
-        btnNext.disabled = false;
-        btnNext.innerHTML = 'Submit Responses <i class="bi bi-send ms-1"></i>';
+    if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+        alert('You appear to be offline. Please reconnect and try again.');
+        return;
     }
+
+    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes('script.google.com')) {
+        // Fire-and-forget: the Apps Script endpoint needs 4-20s to answer and a
+        // no-cors response is opaque, so awaiting it would only stall the UI
+        // without ever confirming delivery. keepalive lets the request finish
+        // even if the tab is closed right away.
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch((error) => {
+            console.error('Submission error:', error);
+        });
+    }
+
+    document.getElementById('survey-wizard').style.display = 'none';
+    document.getElementById('survey-success').style.display = 'block';
 }
 
         // SCARICAMENTO E GESTIONE DATI UNIVERSITÀ CON AUTOCOMPLETE PERSONALIZZATO
@@ -1414,6 +1452,20 @@
             otherDiv.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Other / Not listed (keep typing)';
             otherDiv.onclick = () => selectUniOption('Other / Not listed');
             dropdown.appendChild(otherDiv);
+
+            // The list may still be downloading: keep typing possible, show a
+            // placeholder row and re-render as soon as the data arrives.
+            if (globalUniversities.length === 0 && !universitiesSettled) {
+                const pending = document.createElement('div');
+                pending.className = 'uni-dropdown-item';
+                pending.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading suggestions...';
+                dropdown.appendChild(pending);
+                dropdown.style.display = 'block';
+                ensureUniversitiesLoaded().then(() => {
+                    if (document.body.contains(input)) handleUniSearch(input);
+                });
+                return;
+            }
 
             let matches = [];
             if (query.length > 0) {
